@@ -8,7 +8,7 @@ import products from '../__mocks__/products';
 const ProductList = () => (
   <>
     <Helmet>
-      <title>Products | Material Kit</title>
+      <title>Products | Urskyll Admin</title>
     </Helmet>
     <Box
       sx={{

@@ -19,7 +19,7 @@ const Register = () => {
   return (
     <>
       <Helmet>
-        <title>Register | Material Kit</title>
+        <title>Register | Urskyll Admin</title>
       </Helmet>
       <Box
         sx={{
