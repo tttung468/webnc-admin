@@ -1,11 +1,14 @@
+/* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 // import moment from 'moment';
 // import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
   Button,
   Card,
+  Chip,
   Container,
   Grid,
   Paper,
@@ -51,6 +54,7 @@ const StudentListResults = ({ students, ...rest }) => {
   const rows = [];
   students.forEach((item) => rows.push(item.Info));
 
+  const navigate = useNavigate();
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -65,7 +69,7 @@ const StudentListResults = ({ students, ...rest }) => {
   };
 
   const handleEdit = (values) => {
-    console.log('Edit: ', values);
+    navigate(`/app/account/${values.id}`);
   };
 
   const handleDelete = (values) => {
@@ -88,6 +92,7 @@ const StudentListResults = ({ students, ...rest }) => {
                     {column.label}
                   </TableCell>
                 ))}
+                <TableCell>Status</TableCell>
                 <TableCell align="center">Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -107,12 +112,30 @@ const StudentListResults = ({ students, ...rest }) => {
                           </TableCell>
                         );
                       })}
+                      <TableCell>
+                        <Chip
+                          size="small"
+                          style={
+                            row.isLocked
+                              ? {
+                                  color: '#fff',
+                                  backgroundColor: '#dc004e'
+                                }
+                              : {
+                                  color: '#fff',
+                                  backgroundColor: '#1976d2'
+                                }
+                          }
+                          label={row.isLocked ? 'Blocked' : 'Active'}
+                        />
+                      </TableCell>
                       <TableCell align="center">
                         <Container>
                           <Grid container spacing={0.1}>
                             <Grid item xs={6}>
                               <Button
                                 aria-label="edit"
+                                size="small"
                                 variant="contained"
                                 style={{
                                   color: '#fff',
@@ -127,10 +150,11 @@ const StudentListResults = ({ students, ...rest }) => {
                             <Grid item xs={6}>
                               <Button
                                 aria-label="delete"
+                                size="small"
                                 variant="contained"
                                 style={{
                                   color: '#fff',
-                                  backgroundColor: 'rgb(220, 0, 78)'
+                                  backgroundColor: '#dc004e'
                                 }}
                                 startIcon={<DeleteIcon />}
                                 onClick={() => handleDelete(row)}

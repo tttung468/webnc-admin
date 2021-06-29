@@ -1,4 +1,7 @@
-import moment from 'moment';
+/* eslint-disable arrow-body-style */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+// import moment from 'moment';
 import {
   Avatar,
   Box,
@@ -6,68 +9,55 @@ import {
   Card,
   CardActions,
   CardContent,
+  Chip,
+  Container,
   Divider,
   Typography
 } from '@material-ui/core';
+import { Grid } from 'react-feather';
 
-const user = {
-  avatar: '/static/images/avatars/avatar_1.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'ADMIN',
-  name: 'Loki Laufeyson',
-  timezone: 'GTM-7'
-};
-
-const AccountProfile = (props) => (
-  <Card {...props}>
-    <CardContent>
-      <Box
-        sx={{
-          alignItems: 'center',
-          display: 'flex',
-          flexDirection: 'column'
-        }}
-      >
-        <Avatar
-          src={user.avatar}
+const AccountProfile = ({ user }) => {
+  return (
+    <Card sx={{ height: '100%' }}>
+      <CardContent>
+        <Box
           sx={{
-            height: 100,
-            width: 100
+            alignItems: 'center',
+            display: 'flex',
+            flexDirection: 'column',
           }}
-        />
-        <Typography
-          color="textPrimary"
-          gutterBottom
-          variant="h3"
         >
-          {user.name}
-        </Typography>
-        <Typography
-          color="textSecondary"
-          variant="body1"
-        >
-          {`${user.city} ${user.country}`}
-        </Typography>
-        <Typography
-          color="textSecondary"
-          variant="body1"
-        >
-          {`${moment().format('hh:mm A')} ${user.timezone}`}
-        </Typography>
-      </Box>
-    </CardContent>
-    <Divider />
-    <CardActions>
-      <Button
-        color="primary"
-        fullWidth
-        variant="text"
-      >
-        Upload picture
-      </Button>
-    </CardActions>
-  </Card>
-);
+          <Avatar
+            src={user.Info.avatarUrl}
+            sx={{
+              height: 200,
+              width: 200
+            }}
+          />
+          <Chip
+            size="small"
+            style={{ color: '#fff', backgroundColor: '#1976d2' }}
+            label={user.Role}
+          />
+          <Typography color="textPrimary" gutterBottom variant="h3">
+            {user.Info.userName}
+          </Typography>
+          <Typography color="textSecondary" variant="body1">
+            {user.Info.email}
+          </Typography>
+          <Typography color="textSecondary" variant="body1">
+            {user.Info.id}
+          </Typography>
+        </Box>
+      </CardContent>
+      <Divider />
+      <CardActions>
+        <Button color="primary" fullWidth variant="text">
+          Upload picture
+        </Button>
+      </CardActions>
+    </Card>
+  );
+};
 
 export default AccountProfile;
