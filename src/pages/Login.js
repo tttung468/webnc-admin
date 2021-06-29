@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-alert */
+/* eslint-disable react/jsx-one-expression-per-line */
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import * as Yup from 'yup';
@@ -11,11 +14,45 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
-import FacebookIcon from '../icons/Facebook';
-import GoogleIcon from '../icons/Google';
+// import FacebookIcon from '../icons/Facebook';
+// import GoogleIcon from '../icons/Google';
+import { axiosInstance, parseJwt } from '../utils';
 
 const Login = () => {
   const navigate = useNavigate();
+
+  const handleLogin = async (data) => {
+    // navigate('/app/dashboard', { replace: true });
+    // alert(JSON.stringify(values, null, 2));
+    const formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key]);
+    });
+    formData.append('userName', 'username');
+
+    try {
+      const res = await axiosInstance.post('/auth/login', formData);
+
+      const obj = parseJwt(res.data.results.item1);
+      localStorage.webncAdmin_userId = obj.nameid;
+      localStorage.webncAdmin_accessToken = res.data.results.item1;
+
+      navigate('/app/dashboard');
+    } catch (err) {
+      if (err.response) {
+        console.log(err.response.data);
+        alert(err.response.data.errors.description);
+        // console.log(err.response.status);
+        // console.log(err.response.headers);
+      } else if (err.request) {
+        console.log(err.request);
+      } else {
+        console.log('Error', err.message);
+      }
+
+      // console.log(err.config);
+    }
+  };
 
   return (
     <>
@@ -32,17 +69,29 @@ const Login = () => {
         }}
       >
         <Container maxWidth="sm">
+          <Box sx={{ mb: 3 }}>
+            <Typography color="textPrimary" variant="h2">
+              Sign in
+            </Typography>
+            <Typography color="textSecondary" gutterBottom variant="body2">
+              Sign in on the internal platform
+            </Typography>
+          </Box>
           <Formik
             initialValues={{
-              email: 'demo@devias.io',
-              password: 'Password123'
+              email: '',
+              password: ''
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+              email: Yup.string()
+                .email('Must be a valid email')
+                .max(255)
+                .required('Email is required'),
               password: Yup.string().max(255).required('Password is required')
             })}
-            onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
+            onSubmit={(data, { setSubmitting }) => {
+              setSubmitting(false);
+              handleLogin(data);
             }}
           >
             {({
@@ -55,71 +104,6 @@ const Login = () => {
               values
             }) => (
               <form onSubmit={handleSubmit}>
-                <Box sx={{ mb: 3 }}>
-                  <Typography
-                    color="textPrimary"
-                    variant="h2"
-                  >
-                    Sign in
-                  </Typography>
-                  <Typography
-                    color="textSecondary"
-                    gutterBottom
-                    variant="body2"
-                  >
-                    Sign in on the internal platform
-                  </Typography>
-                </Box>
-                <Grid
-                  container
-                  spacing={3}
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
-                    <Button
-                      color="primary"
-                      fullWidth
-                      startIcon={<FacebookIcon />}
-                      onClick={handleSubmit}
-                      size="large"
-                      variant="contained"
-                    >
-                      Login with Facebook
-                    </Button>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
-                    <Button
-                      fullWidth
-                      startIcon={<GoogleIcon />}
-                      onClick={handleSubmit}
-                      size="large"
-                      variant="contained"
-                    >
-                      Login with Google
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Box
-                  sx={{
-                    pb: 1,
-                    pt: 3
-                  }}
-                >
-                  <Typography
-                    align="center"
-                    color="textSecondary"
-                    variant="body1"
-                  >
-                    or login with email address
-                  </Typography>
-                </Box>
                 <TextField
                   error={Boolean(touched.email && errors.email)}
                   fullWidth
@@ -158,20 +142,12 @@ const Login = () => {
                     Sign in now
                   </Button>
                 </Box>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Don&apos;t have an account?
-                  {' '}
-                  <Link
-                    component={RouterLink}
-                    to="/register"
-                    variant="h6"
-                  >
+                {/* <Typography color="textSecondary" variant="body1">
+                  Don&apos;t have an account?{' '}
+                  <Link component={RouterLink} to="/register" variant="h6">
                     Sign up
                   </Link>
-                </Typography>
+                </Typography> */}
               </form>
             )}
           </Formik>

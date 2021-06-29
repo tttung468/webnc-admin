@@ -1,7 +1,6 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-// import moment from 'moment';
 import {
   Avatar,
   Box,

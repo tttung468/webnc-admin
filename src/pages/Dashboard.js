@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Helmet } from 'react-helmet';
 import { Box, Container, Grid } from '@material-ui/core';
 import Budget from '../components/dashboard/Budget';
@@ -23,7 +24,7 @@ const Dashboard = () => (
     >
       <Container maxWidth={false}>
         <Grid container spacing={3}>
-          <Grid item lg={3} sm={6} xl={3} xs={12}>
+          {/* <Grid item lg={3} sm={6} xl={3} xs={12}>
             <Budget />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
@@ -40,7 +41,7 @@ const Dashboard = () => (
           </Grid>
           <Grid item lg={4} md={6} xl={3} xs={12}>
             <TrafficByDevice sx={{ height: '100%' }} />
-          </Grid>
+          </Grid> */}
           <Grid item lg={4} md={6} xl={3} xs={12}>
             <LatestProducts sx={{ height: '100%' }} />
           </Grid>

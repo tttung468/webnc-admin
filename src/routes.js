@@ -1,3 +1,5 @@
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable no-confusing-arrow */
 import { Navigate } from 'react-router-dom';
 import Students from './pages/Students';
 import Register from './pages/Register';
@@ -10,10 +12,10 @@ import Account from './pages/Account';
 import MainLayout from './components/MainLayout';
 import DashboardLayout from './components/DashboardLayout';
 
-const routes = [
+const routes = (isLoggedIn) => [
   {
     path: 'app',
-    element: <DashboardLayout />,
+    element: isLoggedIn ? <DashboardLayout /> : <Navigate to="/login" />,
     children: [
       { path: 'students', element: <Students /> },
       { path: 'account', element: <Account /> },
@@ -26,7 +28,7 @@ const routes = [
   },
   {
     path: '/',
-    element: <MainLayout />,
+    element: !isLoggedIn ? <MainLayout /> : <Navigate to="/app/dashboard" />,
     children: [
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
