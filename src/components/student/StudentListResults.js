@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 // import moment from 'moment';
@@ -24,6 +24,8 @@ import { makeStyles } from '@material-ui/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
+import AppContext from '../../appContext';
+
 const useStyles = makeStyles({
   root: {
     width: '100%'
@@ -33,7 +35,7 @@ const useStyles = makeStyles({
   }
 });
 
-const StudentListResults = ({ students, ...rest }) => {
+const StudentListResults = ({ ...rest }) => {
   const columns = [
     {
       id: 'id',
@@ -52,7 +54,9 @@ const StudentListResults = ({ students, ...rest }) => {
     }
   ];
   const rows = [];
-  students.forEach((item) => rows.push(item.Info));
+
+  const { store } = useContext(AppContext);
+  store.students_list.forEach((item) => rows.push(item.Info));
 
   const navigate = useNavigate();
   const classes = useStyles();

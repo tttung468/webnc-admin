@@ -23,20 +23,19 @@ import NavItem from './NavItem';
 
 const user = {
   avatar: '/static/images/avatars/avatar_1.png',
-  jobTitle: 'ADMIN',
-  name: 'Loki Laufeyson'
+  role: 'ADMIN'
 };
 
 const items = [
   {
-    href: '/app/students',
-    icon: UsersIcon,
-    title: 'Students'
-  },
-  {
     href: '/app/dashboard',
     icon: BarChartIcon,
     title: 'Dashboard'
+  },
+  {
+    href: '/app/students',
+    icon: UsersIcon,
+    title: 'Students'
   },
   {
     href: '/app/products',
@@ -106,11 +105,11 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           to="/app/account"
         />
         <Typography color="textPrimary" variant="h5">
-          {user.name}
+          {user.role}
         </Typography>
-        <Typography color="textSecondary" variant="body2">
-          {user.jobTitle}
-        </Typography>
+        {/* <Typography color="textSecondary" variant="body2">
+          {user.role}
+        </Typography> */}
       </Box>
       <Divider />
       <Box sx={{ p: 2 }}>

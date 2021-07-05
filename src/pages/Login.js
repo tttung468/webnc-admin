@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-alert */
-/* eslint-disable react/jsx-one-expression-per-line */
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import * as Yup from 'yup';
@@ -22,8 +21,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (data) => {
-    // navigate('/app/dashboard', { replace: true });
-    // alert(JSON.stringify(values, null, 2));
     const formData = new FormData();
     Object.keys(data).forEach((key) => {
       formData.append(key, data[key]);
@@ -32,7 +29,6 @@ const Login = () => {
 
     try {
       const res = await axiosInstance.post('/auth/login', formData);
-
       const obj = parseJwt(res.data.results.item1);
       localStorage.webncAdmin_userId = obj.nameid;
       localStorage.webncAdmin_accessToken = res.data.results.item1;
@@ -41,7 +37,7 @@ const Login = () => {
     } catch (err) {
       if (err.response) {
         console.log(err.response.data);
-        alert(err.response.data.errors.description);
+        // alert(err.response.data.errors.description);
         // console.log(err.response.status);
         // console.log(err.response.headers);
       } else if (err.request) {

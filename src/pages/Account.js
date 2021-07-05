@@ -1,19 +1,22 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Box, Container, Grid } from '@material-ui/core';
 import AccountProfile from '../components/account/AccountProfile';
 import AccountProfileDetails from '../components/account/AccountProfileDetails';
 
+import AppContext from '../appContext';
+import reducer from '../reducer/studentProfile';
+
 const demoData = {
   results: {
     Info: {
-      id: '52dc2416-4790-4ede-9ae1-779a898bcb2d',
-      userName: 'tttung468',
-      email: 'tttung468@gmail.com',
+      id: '',
+      userName: '',
+      email: '',
       phoneNumber: null,
-      avatarUrl: 'https://picsum.photos/200',
+      avatarUrl: '',
       accessFailedCount: 0,
 
       watchLists: null,
@@ -25,35 +28,40 @@ const demoData = {
       isLocked: false,
       emailConfirmed: false,
       phoneNumberConfirmed: false,
-      twoFactorEnabled: false,
+      twoFactorEnabled: false
     },
     Role: 'Admin'
   }
 };
 
+const initialState = {
+  student_profile: demoData.results
+};
+
 const Account = () => {
   const navigate = useNavigate();
-  const adminID = '52dc2416-4790-4ede-9ae1-779a898bcb2d';
+  const [store, dispatch] = useReducer(reducer, initialState);
+  const adminID = localStorage.getItem('adminID');
   const id = useParams().id ? useParams().id : adminID;
-  const [user, setUser] = useState(demoData.results);
 
   useEffect(() => {
-    // fetch(`https://programmingcourse.herokuapp.com/api/users/${id}`)
-    //   .then((response) => {
-    //     if (!response.ok) throw new Error(response.status);
-    //     else return response.json();
-    //   })
-    //   .then((data) => {
-    //     setUser(data.results);
-    //   })
-    //   .catch((error) => {
-    //     console.log(`error: ${error}`);
-    //     navigate('/404');
-    //   });
-
-    setTimeout(() => {
-      setUser(demoData.results);
-    }, 1000);
+    fetch(`https://programmingcourse.herokuapp.com/api/users/${id}`)
+      .then((response) => {
+        if (!response.ok) throw new Error(response.status);
+        else return response.json();
+      })
+      .then((data) => {
+        dispatch({
+          type: 'init_student_profile',
+          payload: {
+            students_profile: data.results
+          }
+        });
+      })
+      .catch((error) => {
+        console.log(`error: ${error}`);
+        navigate('/404');
+      });
   }, []);
 
   return (
@@ -70,12 +78,14 @@ const Account = () => {
       >
         <Container maxWidth="lg">
           <Grid container spacing={3}>
-            <Grid item lg={4} md={6} xs={12}>
-              <AccountProfile user={user} />
-            </Grid>
-            <Grid item lg={8} md={6} xs={12}>
-              <AccountProfileDetails user={user} />
-            </Grid>
+            <AppContext.Provider value={{ store, dispatch }}>
+              <Grid item lg={4} md={6} xs={12}>
+                <AccountProfile />
+              </Grid>
+              {/* <Grid item lg={8} md={6} xs={12}>
+                <AccountProfileDetails />
+              </Grid> */}
+            </AppContext.Provider>
           </Grid>
         </Container>
       </Box>

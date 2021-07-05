@@ -156,7 +156,7 @@ const AccountProfileDetails = ({ user }) => {
                 name="phone"
                 onChange={handleChange}
                 type="number"
-                value={details.phoneNumber}
+                value={details.phoneNumber ? details.phoneNumber : ''}
                 variant="outlined"
               />
             </Grid>
