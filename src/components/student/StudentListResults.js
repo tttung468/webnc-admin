@@ -189,8 +189,8 @@ const StudentListResults = ({ ...rest }) => {
   );
 };
 
-StudentListResults.propTypes = {
-  students: PropTypes.array.isRequired
-};
+// StudentListResults.propTypes = {
+//   students: PropTypes.array.isRequired
+// };
 
 export default StudentListResults;

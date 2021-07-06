@@ -21,14 +21,17 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (data) => {
-    const formData = new FormData();
-    Object.keys(data).forEach((key) => {
-      formData.append(key, data[key]);
-    });
-    formData.append('userName', 'username');
+    // eslint-disable-next-line no-param-reassign
+    data.userName = data.email;
+    const jsonData = JSON.stringify(data);
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
 
     try {
-      const res = await axiosInstance.post('/auth/login', formData);
+      const res = await axiosInstance.post('/auth/login', jsonData, headers);
       const obj = parseJwt(res.data.results.item1);
       localStorage.webncAdmin_userId = obj.nameid;
       localStorage.webncAdmin_accessToken = res.data.results.item1;
@@ -36,17 +39,12 @@ const Login = () => {
       navigate('/app/dashboard');
     } catch (err) {
       if (err.response) {
-        console.log(err.response.data);
-        // alert(err.response.data.errors.description);
-        // console.log(err.response.status);
-        // console.log(err.response.headers);
+        alert(err.response.data.errors.description);
       } else if (err.request) {
-        console.log(err.request);
+        alert(err.request);
       } else {
-        console.log('Error', err.message);
+        alert('Error', err.message);
       }
-
-      // console.log(err.config);
     }
   };
 
@@ -79,10 +77,7 @@ const Login = () => {
               password: ''
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string()
-                .email('Must be a valid email')
-                .max(255)
-                .required('Email is required'),
+              email: Yup.string().max(255).required('Email is required'),
               password: Yup.string().max(255).required('Password is required')
             })}
             onSubmit={(data, { setSubmitting }) => {
@@ -104,12 +99,11 @@ const Login = () => {
                   error={Boolean(touched.email && errors.email)}
                   fullWidth
                   helperText={touched.email && errors.email}
-                  label="Email Address"
+                  label="Email Or Username"
                   margin="normal"
                   name="email"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  type="email"
                   value={values.email}
                   variant="outlined"
                 />

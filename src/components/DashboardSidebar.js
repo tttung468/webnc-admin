@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -20,11 +20,7 @@ import {
   Users as UsersIcon
 } from 'react-feather';
 import NavItem from './NavItem';
-
-const user = {
-  avatar: '/static/images/avatars/avatar_1.png',
-  role: 'ADMIN'
-};
+import AppContext from '../appContext';
 
 const items = [
   {
@@ -71,6 +67,7 @@ const items = [
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   const location = useLocation();
+  const { store } = useContext(AppContext);
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -96,7 +93,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       >
         <Avatar
           component={RouterLink}
-          src={user.avatar}
+          src={store.admin_info.Info.avatarUrl}
           sx={{
             cursor: 'pointer',
             width: 64,
@@ -105,7 +102,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           to="/app/account"
         />
         <Typography color="textPrimary" variant="h5">
-          {user.role}
+          {store.admin_info.Role}
         </Typography>
         {/* <Typography color="textSecondary" variant="body2">
           {user.role}

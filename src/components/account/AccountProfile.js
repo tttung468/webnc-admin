@@ -1,7 +1,8 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useContext } from 'react';
+import { useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Avatar,
   Box,
@@ -15,13 +16,17 @@ import {
   Typography
 } from '@material-ui/core';
 import { Grid } from 'react-feather';
-
 import AppContext from '../../appContext';
 
 const AccountProfile = () => {
   const { store } = useContext(AppContext);
-  const user = store.student_profile;
-  console.log(`user:${JSON.stringify(user)}`);
+  let user = store.admin_info;
+
+  // check route has id
+  if (useParams().id) {
+    user = store.user_info;
+  }
+  console.log(user);
 
   if (user) {
     return (
