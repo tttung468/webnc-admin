@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-alert */
+import { useContext } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import * as Yup from 'yup';
@@ -16,9 +17,27 @@ import {
 // import FacebookIcon from '../icons/Facebook';
 // import GoogleIcon from '../icons/Google';
 import { axiosInstance, parseJwt } from '../utils';
+import AppContext from '../appContext';
+
+async function getAdminInfo(dispatch) {
+  try {
+    const res = await axiosInstance.get(
+      `/users/${localStorage.webncAdmin_userId}`
+    );
+    dispatch({
+      type: 'init_admin_info',
+      payload: {
+        admin_info: res.data.results
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 const Login = () => {
   const navigate = useNavigate();
+  const { store, dispatch } = useContext(AppContext);
 
   const handleLogin = async (data) => {
     // eslint-disable-next-line no-param-reassign
@@ -33,18 +52,20 @@ const Login = () => {
     try {
       const res = await axiosInstance.post('/auth/login', jsonData, headers);
       const obj = parseJwt(res.data.results.item1);
-      localStorage.webncAdmin_userId = obj.nameid;
-      localStorage.webncAdmin_accessToken = res.data.results.item1;
 
-      navigate('/app/dashboard');
-    } catch (err) {
-      if (err.response) {
-        alert(err.response.data.errors.description);
-      } else if (err.request) {
-        alert(err.request);
+      if (obj.role === 'Admin') {
+        localStorage.webncAdmin_userId = obj.nameid;
+        localStorage.webncAdmin_accessToken = res.data.results.item1;
+
+        // get admin info to init state in reducer
+        await getAdminInfo(dispatch);
+
+        navigate('/app/dashboard');
       } else {
-        alert('Error', err.message);
+        alert("You don't have permission to login.");
       }
+    } catch (err) {
+      alert(err);
     }
   };
 

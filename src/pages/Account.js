@@ -6,31 +6,28 @@ import { Box, Container, Grid } from '@material-ui/core';
 import AccountProfile from '../components/account/AccountProfile';
 import AccountProfileDetails from '../components/account/AccountProfileDetails';
 import AppContext from '../appContext';
+import { axiosInstance } from '../utils';
 
 const Account = () => {
   const navigate = useNavigate();
-  const { store } = useContext(AppContext);
-  const id = useParams().id ? useParams().id : localStorage.getItem('adminID');
+  const { store, dispatch } = useContext(AppContext);
+  const { id } = useParams();
 
-  // useEffect(() => {
-  //   fetch(`https://programmingcourse.herokuapp.com/api/users/${id}`)
-  //     .then((response) => {
-  //       if (!response.ok) throw new Error(response.status);
-  //       else return response.json();
-  //     })
-  //     .then((data) => {
-  //       dispatch({
-  //         type: 'init_student_profile',
-  //         payload: {
-  //           students_profile: data.results
-  //         }
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.log(`error: ${error}`);
-  //       navigate('/404');
-  //     });
-  // }, []);
+  useEffect(async () => {
+    if (id) {
+      try {
+        const res = await axiosInstance.get(`/users/${id}`);
+        dispatch({
+          type: 'init_user_info',
+          payload: {
+            user_info: res.data.results
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, []);
 
   return (
     <>
@@ -49,9 +46,9 @@ const Account = () => {
             <Grid item lg={4} md={6} xs={12}>
               <AccountProfile />
             </Grid>
-            {/* <Grid item lg={8} md={6} xs={12}>
-                <AccountProfileDetails />
-              </Grid> */}
+            <Grid item lg={8} md={6} xs={12}>
+              <AccountProfileDetails />
+            </Grid>
           </Grid>
         </Container>
       </Box>

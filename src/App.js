@@ -68,21 +68,6 @@ const App = () => {
     } catch (err) {
       console.log(err);
     }
-
-    // get admin info
-    try {
-      const res = await axiosInstance.get(
-        `/users/${localStorage.webncAdmin_userId}`
-      );
-      dispatch({
-        type: 'init_admin_info',
-        payload: {
-          admin_info: res.data.results
-        }
-      });
-    } catch (err) {
-      console.log(err);
-    }
   }, []);
 
   return (

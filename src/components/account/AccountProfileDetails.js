@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -14,8 +15,17 @@ import {
   TextField,
   Switch
 } from '@material-ui/core';
+import AppContext from '../../appContext';
 
-const AccountProfileDetails = ({ user }) => {
+const AccountProfileDetails = () => {
+  const { store } = useContext(AppContext);
+  let user = store.admin_info;
+
+  // check route has id
+  if (useParams().id) {
+    user = store.user_info;
+  }
+
   const [details, setDetails] = useState({
     username: user.Info.userName,
     email: user.Info.email,
@@ -51,7 +61,7 @@ const AccountProfileDetails = ({ user }) => {
         <Divider />
         <CardContent>
           <Grid container spacing={1}>
-            <Grid item xs={5}>
+            <Grid item xs={6}>
               <FormControlLabel
                 control={
                   <Switch
@@ -65,21 +75,7 @@ const AccountProfileDetails = ({ user }) => {
                 labelPlacement="end"
               />
             </Grid>
-            <Grid item xs={5}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={switchState.emailConfirmed}
-                    onChange={handleChangeSwitch}
-                    name="emailConfirmed"
-                    color="primary"
-                  />
-                }
-                label="Email Confirmation"
-                labelPlacement="end"
-              />
-            </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={6}>
               <FormControlLabel
                 control={
                   <Switch
@@ -90,34 +86,6 @@ const AccountProfileDetails = ({ user }) => {
                   />
                 }
                 label="Lock"
-                labelPlacement="end"
-              />
-            </Grid>
-            <Grid item xs={5}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={switchState.phoneNumberConfirmed}
-                    onChange={handleChangeSwitch}
-                    name="phoneNumberConfirmed"
-                    color="primary"
-                  />
-                }
-                label="Phone Number Confirmation"
-                labelPlacement="end"
-              />
-            </Grid>
-            <Grid item xs={7}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={switchState.twoFactorEnabled}
-                    onChange={handleChangeSwitch}
-                    name="twoFactorEnabled"
-                    color="primary"
-                  />
-                }
-                label="Two-factor Authentication"
                 labelPlacement="end"
               />
             </Grid>
@@ -169,6 +137,7 @@ const AccountProfileDetails = ({ user }) => {
                 type="number"
                 value={details.accessFailedCount}
                 variant="outlined"
+                disabled
               />
             </Grid>
           </Grid>

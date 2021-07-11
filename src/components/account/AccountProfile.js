@@ -26,7 +26,6 @@ const AccountProfile = () => {
   if (useParams().id) {
     user = store.user_info;
   }
-  console.log(user);
 
   if (user) {
     return (

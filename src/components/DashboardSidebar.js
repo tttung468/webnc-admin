@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
+  Chip,
   Divider,
   Drawer,
-  List,
-  Typography
+  List
 } from '@material-ui/core';
 import {
   AlertCircle as AlertCircleIcon,
@@ -101,9 +101,14 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           }}
           to="/app/account"
         />
-        <Typography color="textPrimary" variant="h5">
+        {/* <Typography color="textPrimary" variant="h5">
           {store.admin_info.Role}
-        </Typography>
+        </Typography> */}
+        <Chip
+          size="small"
+          style={{ color: '#fff', backgroundColor: '#1976d2' }}
+          label="Admin"
+        />
         {/* <Typography color="textSecondary" variant="body2">
           {user.role}
         </Typography> */}

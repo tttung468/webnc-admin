@@ -96,7 +96,8 @@ const StudentListResults = ({ ...rest }) => {
                     {column.label}
                   </TableCell>
                 ))}
-                <TableCell>Status</TableCell>
+                <TableCell>Verified Email</TableCell>
+                <TableCell>Blocked</TableCell>
                 <TableCell align="center">Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -116,6 +117,23 @@ const StudentListResults = ({ ...rest }) => {
                           </TableCell>
                         );
                       })}
+                      <TableCell align="center">
+                        <Chip
+                          size="small"
+                          style={
+                            row.isTwoStepConfirmation
+                              ? {
+                                  color: '#fff',
+                                  backgroundColor: '#1976d2'
+                                }
+                              : {
+                                  color: '#fff',
+                                  backgroundColor: '#dc004e'
+                                }
+                          }
+                          label={row.isTwoStepConfirmation ? 'True' : 'False'}
+                        />
+                      </TableCell>
                       <TableCell>
                         <Chip
                           size="small"
@@ -123,14 +141,14 @@ const StudentListResults = ({ ...rest }) => {
                             row.isLocked
                               ? {
                                   color: '#fff',
-                                  backgroundColor: '#dc004e'
+                                  backgroundColor: '#1976d2'
                                 }
                               : {
                                   color: '#fff',
-                                  backgroundColor: '#1976d2'
+                                  backgroundColor: '#dc004e'
                                 }
                           }
-                          label={row.isLocked ? 'Blocked' : 'Active'}
+                          label={row.isLocked ? 'True' : 'False'}
                         />
                       </TableCell>
                       <TableCell align="center">
