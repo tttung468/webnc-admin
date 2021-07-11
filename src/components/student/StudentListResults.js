@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
-import React, { useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 // import moment from 'moment';
@@ -23,7 +23,7 @@ import {
 import { makeStyles } from '@material-ui/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-
+import { axiosInstance } from '../../utils';
 import AppContext from '../../appContext';
 
 const useStyles = makeStyles({
@@ -53,15 +53,34 @@ const StudentListResults = ({ ...rest }) => {
       minWidth: 110
     }
   ];
-  const rows = [];
+  const [rows, setRows] = useState([]);
+  const { store, dispatch } = useContext(AppContext);
 
-  const { store } = useContext(AppContext);
-  store.students_list.forEach((item) => rows.push(item.Info));
+  // init value for state in reducer
+  useEffect(async () => {
+    // get users list
+    try {
+      const res = await axiosInstance.get('/Users/GetStudentList');
+      dispatch({
+        type: 'init_students_list',
+        payload: {
+          students_list: res.data.results.students
+        }
+      });
+
+      // set rows state
+      const infoRows = [];
+      res.data.results.students.forEach((item) => infoRows.push(item.Info));
+      setRows(infoRows);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   const navigate = useNavigate();
   const classes = useStyles();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

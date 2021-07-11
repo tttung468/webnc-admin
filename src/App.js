@@ -6,7 +6,6 @@ import routes from './routes';
 import GlobalStyles from './components/GlobalStyles';
 import './mixins/chartjs';
 import theme from './theme';
-import { axiosInstance } from './utils';
 import AppContext from './appContext';
 import reducer from './reducer';
 
@@ -53,22 +52,6 @@ const App = () => {
 
   // context
   const [store, dispatch] = useReducer(reducer, initialState);
-
-  // init value for state in reducer
-  useEffect(async () => {
-    // get users list
-    try {
-      const res = await axiosInstance.get('/users');
-      dispatch({
-        type: 'init_students_list',
-        payload: {
-          students_list: res.data.results
-        }
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
 
   return (
     <ThemeProvider theme={theme}>
