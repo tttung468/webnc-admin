@@ -20,11 +20,11 @@ import AppContext from '../../appContext';
 
 const AccountProfile = () => {
   const { store } = useContext(AppContext);
-  let user = store.admin_info;
+  let user = store.adminInfo;
 
   // check route has id
   if (useParams().id) {
-    user = store.user_info;
+    user = store.userInfo;
   }
 
   if (user) {
@@ -41,8 +41,8 @@ const AccountProfile = () => {
             <Avatar
               src={user.Info.avatarUrl}
               sx={{
-                height: 200,
-                width: 200
+                height: 170,
+                width: 170
               }}
             />
             <Chip
@@ -61,12 +61,12 @@ const AccountProfile = () => {
             </Typography>
           </Box>
         </CardContent>
-        <Divider />
+        {/* <Divider />
         <CardActions>
           <Button color="primary" fullWidth variant="text">
             Upload picture
           </Button>
-        </CardActions>
+        </CardActions> */}
       </Card>
     );
   }

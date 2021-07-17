@@ -25,9 +25,9 @@ async function getAdminInfo(dispatch) {
       `/users/${localStorage.webncAdmin_userId}`
     );
     dispatch({
-      type: 'init_admin_info',
+      type: 'initAdminInfo',
       payload: {
-        admin_info: res.data.results
+        adminInfo: res.data.results
       }
     });
   } catch (err) {

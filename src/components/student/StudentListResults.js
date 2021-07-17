@@ -62,9 +62,9 @@ const StudentListResults = ({ ...rest }) => {
     try {
       const res = await axiosInstance.get('/Users/GetStudentList');
       dispatch({
-        type: 'init_students_list',
+        type: 'initStudentsList',
         payload: {
-          students_list: res.data.results.students
+          studentsList: res.data.results.students
         }
       });
 

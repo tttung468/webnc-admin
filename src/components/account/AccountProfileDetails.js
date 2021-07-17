@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable react/prop-types */
-import { useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Box,
@@ -18,40 +18,62 @@ import {
 import AppContext from '../../appContext';
 
 const AccountProfileDetails = () => {
-  const { store } = useContext(AppContext);
-  let user = store.admin_info;
+  const { store, dispatch } = useContext(AppContext);
+  const { id } = useParams();
+  const [user, setUser] = useState(store.adminInfo);
 
-  // check route has id
-  if (useParams().id) {
-    user = store.user_info;
-  }
-
+  // details state
   const [details, setDetails] = useState({
-    username: user.Info.userName,
+    userName: user.Info.userName,
     email: user.Info.email,
-    phoneNumber: user.Info.phoneNumber,
-    accessFailedCount: user.Info.accessFailedCount
+    description: user.Info.description,
+    phoneNumber: user.Info.phoneNumber
   });
-  const handleChange = (event) => {
+  const handleChangeDetails = (event) => {
     setDetails({
       ...details,
       [event.target.name]: event.target.value
     });
   };
 
-  const [switchState, setSwitchState] = useState({
+  // switch states
+  const [switchStates, setSwitchStates] = useState({
     isTwoStepConfirmation: user.Info.isTwoStepConfirmation,
-    emailConfirmed: user.Info.emailConfirmed,
-    phoneNumberConfirmed: user.Info.phoneNumberConfirmed,
-    twoFactorEnabled: user.Info.twoFactorEnabled,
     isLocked: user.Info.isLocked
   });
   const handleChangeSwitch = (event) => {
-    setSwitchState({
-      ...switchState,
+    setSwitchStates({
+      ...switchStates,
       [event.target.name]: event.target.checked
     });
     console.log(`${event.target.name}: ${event.target.checked}`);
+  };
+
+  // check route has id to change user in component
+  useEffect(() => {
+    let effectUser = store.adminInfo;
+
+    if (id) {
+      effectUser = store.userInfo;
+    }
+
+    setUser(effectUser);
+    setSwitchStates({
+      isTwoStepConfirmation: effectUser.Info.isTwoStepConfirmation,
+      isLocked: effectUser.Info.isLocked
+    });
+    setDetails({
+      userName: effectUser.Info.userName,
+      email: effectUser.Info.email,
+      description: effectUser.Info.description,
+      phoneNumber: effectUser.Info.phoneNumber
+    });
+  }, [store.userInfo, id]);
+
+  // handle save user info
+  const handleSave = (event) => {
+    console.log('saved');
+    console.log(details);
   };
 
   return (
@@ -65,10 +87,12 @@ const AccountProfileDetails = () => {
               <FormControlLabel
                 control={
                   <Switch
-                    checked={switchState.isTwoStepConfirmation}
+                    checked={switchStates.isTwoStepConfirmation}
                     onChange={handleChangeSwitch}
                     name="isTwoStepConfirmation"
                     color="primary"
+                    // eslint-disable-next-line eqeqeq
+                    disabled={user.Role == 'Admin'}
                   />
                 }
                 label="Two-step Confirmation"
@@ -79,10 +103,12 @@ const AccountProfileDetails = () => {
               <FormControlLabel
                 control={
                   <Switch
-                    checked={switchState.isLocked}
+                    checked={switchStates.isLocked}
                     onChange={handleChangeSwitch}
                     name="isLocked"
                     color="primary"
+                    // eslint-disable-next-line eqeqeq
+                    disabled={user.Role == 'Admin'}
                   />
                 }
                 label="Lock"
@@ -98,10 +124,10 @@ const AccountProfileDetails = () => {
               <TextField
                 fullWidth
                 label="Username"
-                name="username"
-                onChange={handleChange}
+                name="userName"
+                onChange={handleChangeDetails}
                 required
-                value={details.username}
+                value={details.userName}
                 variant="outlined"
               />
             </Grid>
@@ -110,7 +136,7 @@ const AccountProfileDetails = () => {
                 fullWidth
                 label="Email Address"
                 name="email"
-                onChange={handleChange}
+                onChange={handleChangeDetails}
                 type="email"
                 required
                 value={details.email}
@@ -120,24 +146,22 @@ const AccountProfileDetails = () => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                label="Phone Number"
-                name="phone"
-                onChange={handleChange}
-                type="number"
-                value={details.phoneNumber ? details.phoneNumber : ''}
+                label="Description"
+                name="description"
+                onChange={handleChangeDetails}
+                value={details.description ? details.description : ''}
                 variant="outlined"
               />
             </Grid>
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                label="Fail Access (times)"
-                name="accessFailedCount"
-                onChange={handleChange}
+                label="Phone Number"
+                name="phoneNumber"
+                onChange={handleChangeDetails}
                 type="number"
-                value={details.accessFailedCount}
+                value={details.phoneNumber ? details.phoneNumber : ''}
                 variant="outlined"
-                disabled
               />
             </Grid>
           </Grid>
@@ -150,7 +174,7 @@ const AccountProfileDetails = () => {
             p: 2
           }}
         >
-          <Button color="primary" variant="contained">
+          <Button color="primary" variant="contained" onClick={handleSave}>
             Save details
           </Button>
         </Box>

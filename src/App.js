@@ -33,9 +33,10 @@ const initUser = {
 };
 
 const initialState = {
-  students_list: [],
-  admin_info: initUser,
-  user_info: initUser
+  studentsList: [],
+  teachersList: [],
+  adminInfo: initUser,
+  userInfo: initUser
 };
 
 const App = () => {

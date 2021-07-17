@@ -93,7 +93,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       >
         <Avatar
           component={RouterLink}
-          src={store.admin_info.Info.avatarUrl}
+          src={store.adminInfo.Info.avatarUrl}
           sx={{
             cursor: 'pointer',
             width: 64,
@@ -102,7 +102,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           to="/app/account"
         />
         {/* <Typography color="textPrimary" variant="h5">
-          {store.admin_info.Role}
+          {store.adminInfo.Role}
         </Typography> */}
         <Chip
           size="small"

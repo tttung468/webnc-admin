@@ -11,21 +11,31 @@ import { axiosInstance } from '../utils';
 const Account = () => {
   const navigate = useNavigate();
   const { store, dispatch } = useContext(AppContext);
-  const { id } = useParams();
+  let { id } = useParams();
 
   useEffect(async () => {
-    if (id) {
-      try {
-        const res = await axiosInstance.get(`/users/${id}`);
+    try {
+      id = id || store.adminInfo.Info.id;
+      const res = await axiosInstance.get(`/users/${id}`);
+      console.log(res);
+
+      if (id) {
         dispatch({
-          type: 'init_user_info',
+          type: 'initUserInfo',
           payload: {
-            user_info: res.data.results
+            userInfo: res.data.results
           }
         });
-      } catch (err) {
-        console.log(err);
+      } else {
+        dispatch({
+          type: 'initAdminInfo',
+          payload: {
+            adminInfo: res.data.results
+          }
+        });
       }
+    } catch (err) {
+      console.log(err);
     }
   }, []);
 

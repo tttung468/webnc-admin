@@ -4,32 +4,41 @@
 export default function reducer(state, action) {
   // action = { type, payload }
   switch (action.type) {
-    // students_list action
-    case 'init_students_list': {
+    // studentsList action
+    case 'initStudentsList': {
       return {
         ...state,
-        students_list: action.payload.students_list
+        studentsList: action.payload.studentsList
       };
     }
-    // end students_list action
+    // end studentsList action
 
-    // admin_info action
-    case 'init_admin_info': {
+    // teachersList action
+    case 'initTeachersList': {
       return {
         ...state,
-        admin_info: action.payload.admin_info
+        teachersList: action.payload.teachersList
       };
     }
-    // end admin_info action
+    // end teachersList action
 
-    // user_info action
-    case 'init_user_info': {
+    // adminInfo action
+    case 'initAdminInfo': {
       return {
         ...state,
-        user_info: action.payload.user_info
+        adminInfo: action.payload.adminInfo
       };
     }
-    // end user_info action
+    // end adminInfo action
+
+    // userInfo action
+    case 'initUserInfo': {
+      return {
+        ...state,
+        userInfo: action.payload.userInfo
+      };
+    }
+    // end userInfo action
 
     default:
       return state;
