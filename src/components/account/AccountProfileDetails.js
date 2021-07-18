@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable react/prop-types */
@@ -16,18 +17,54 @@ import {
   Switch
 } from '@material-ui/core';
 import AppContext from '../../appContext';
+import { axiosInstance } from '../../utils';
+
+const VeryfyTwoStepConfirmation = async (email, otpCode) => {
+  try {
+    const data = {
+      email,
+      otpCode
+    };
+    const jsonData = JSON.stringify(data);
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    const res = await axiosInstance.post(
+      '/Auth/VerifyTwoStepVerification',
+      jsonData,
+      headers
+    );
+    alert('Verify two-step confirmation successfuly');
+  } catch (err) {
+    if (err.response) {
+      console.log(err.response.data);
+      alert(err.response.data.errors.description);
+    } else if (err.request) {
+      console.log(err.request);
+    } else {
+      console.log('Error', err.message);
+    }
+  }
+
+  return true;
+};
 
 const AccountProfileDetails = () => {
   const { store, dispatch } = useContext(AppContext);
   const { id } = useParams();
-  const [user, setUser] = useState(store.adminInfo);
+  const user = store.admin;
 
   // details state
   const [details, setDetails] = useState({
-    userName: user.Info.userName,
-    email: user.Info.email,
-    description: user.Info.description,
-    phoneNumber: user.Info.phoneNumber
+    id: user.id,
+    otpCode: user.otpCode,
+    role: user.role,
+    email: user.email,
+    userName: user.userName,
+    description: user.description,
+    avatarUrl: user.avatarUrl
   });
   const handleChangeDetails = (event) => {
     setDetails({
@@ -38,48 +75,121 @@ const AccountProfileDetails = () => {
 
   // switch states
   const [switchStates, setSwitchStates] = useState({
-    isTwoStepConfirmation: user.Info.isTwoStepConfirmation,
-    isLocked: user.Info.isLocked
+    isTwoStepConfirmation: user.isTwoStepConfirmation,
+    isLocked: user.isLocked
   });
   const handleChangeSwitch = (event) => {
+    if (event.target.name === 'isTwoStepConfirmation') {
+      const checkVerifySuccessfully = VeryfyTwoStepConfirmation(
+        details.email,
+        details.otpCode
+      );
+
+      if (checkVerifySuccessfully === false) {
+        return;
+      }
+    } else if (event.target.name === 'isLocked') {
+      console.log(event.target.name);
+    }
+
     setSwitchStates({
       ...switchStates,
       [event.target.name]: event.target.checked
     });
-    console.log(`${event.target.name}: ${event.target.checked}`);
   };
 
   // check route has id to change user in component
   useEffect(() => {
-    let effectUser = store.adminInfo;
+    let effectUser = store.admin;
 
     if (id) {
-      effectUser = store.userInfo;
+      effectUser = store.user;
     }
 
-    setUser(effectUser);
+    // setUser(effectUser);
     setSwitchStates({
-      isTwoStepConfirmation: effectUser.Info.isTwoStepConfirmation,
-      isLocked: effectUser.Info.isLocked
+      isTwoStepConfirmation: effectUser.isTwoStepConfirmation,
+      isLocked: effectUser.isLocked
     });
     setDetails({
-      userName: effectUser.Info.userName,
-      email: effectUser.Info.email,
-      description: effectUser.Info.description,
-      phoneNumber: effectUser.Info.phoneNumber
+      id: effectUser.id,
+      otpCode: effectUser.otpCode,
+      role: effectUser.role,
+      email: effectUser.email,
+      userName: effectUser.userName,
+      description: effectUser.description,
+      avatarUrl: effectUser.avatarUrl
     });
-  }, [store.userInfo, id]);
+  }, [store.user, store.admin, id]);
 
   // handle save user info
-  const handleSave = (event) => {
-    console.log('saved');
-    console.log(details);
+  const handleSave = async (event) => {
+    const data = {
+      userId: details.id,
+      newUserName: details.userName,
+      newAvatarUrl: details.avatarUrl,
+      newEmail: details.email,
+      description: details.description
+    };
+    const jsonData = JSON.stringify(data);
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    try {
+      const res = await axiosInstance.put('/users', jsonData, headers);
+      res.data.results.role = details.role;
+      alert('Update successfully.');
+
+      if (id) {
+        dispatch({
+          type: 'initUser',
+          payload: {
+            user: res.data.results
+          }
+        });
+      } else {
+        dispatch({
+          type: 'initAdmin',
+          payload: {
+            admin: res.data.results
+          }
+        });
+      }
+    } catch (err) {
+      if (err.response) {
+        console.log(err.response.data);
+        alert(err.response.data.errors.description);
+      } else if (err.request) {
+        console.log(err.request);
+      } else {
+        console.log('Error', err.message);
+      }
+    }
   };
 
   return (
     <form autoComplete="off" noValidate>
       <Card sx={{ height: '100%' }}>
-        <CardHeader title="Profile" />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            p: 1
+          }}
+        >
+          <CardHeader title="Profile" />
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={handleSave}
+            size="small"
+          >
+            Save details
+          </Button>
+        </Box>
         <Divider />
         <CardContent>
           <Grid container spacing={1}>
@@ -91,8 +201,7 @@ const AccountProfileDetails = () => {
                     onChange={handleChangeSwitch}
                     name="isTwoStepConfirmation"
                     color="primary"
-                    // eslint-disable-next-line eqeqeq
-                    disabled={user.Role == 'Admin'}
+                    disabled={switchStates.isTwoStepConfirmation}
                   />
                 }
                 label="Two-step Confirmation"
@@ -107,8 +216,7 @@ const AccountProfileDetails = () => {
                     onChange={handleChangeSwitch}
                     name="isLocked"
                     color="primary"
-                    // eslint-disable-next-line eqeqeq
-                    disabled={user.Role == 'Admin'}
+                    disabled={!id}
                   />
                 }
                 label="Lock"
@@ -137,47 +245,24 @@ const AccountProfileDetails = () => {
                 label="Email Address"
                 name="email"
                 onChange={handleChangeDetails}
-                type="email"
                 required
                 value={details.email}
                 variant="outlined"
               />
             </Grid>
-            <Grid item md={6} xs={12}>
+            <Grid item md={12} xs={12}>
               <TextField
                 fullWidth
                 label="Description"
                 name="description"
                 onChange={handleChangeDetails}
-                value={details.description ? details.description : ''}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Phone Number"
-                name="phoneNumber"
-                onChange={handleChangeDetails}
-                type="number"
-                value={details.phoneNumber ? details.phoneNumber : ''}
+                value={details.description != null ? details.description : ''}
                 variant="outlined"
               />
             </Grid>
           </Grid>
         </CardContent>
         <Divider />
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            p: 2
-          }}
-        >
-          <Button color="primary" variant="contained" onClick={handleSave}>
-            Save details
-          </Button>
-        </Box>
       </Card>
     </form>
   );

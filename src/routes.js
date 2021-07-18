@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 import { Navigate } from 'react-router-dom';
 import Students from './pages/Students';
+import Lecturers from './pages/Lecturers';
 import Register from './pages/Register';
 import Settings from './pages/Settings';
 import ProductList from './pages/ProductList';
@@ -16,11 +18,12 @@ const routes = (isLoggedIn) => [
     element: isLoggedIn ? <DashboardLayout /> : <Navigate to="/login" />,
     children: [
       { path: 'students', element: <Students /> },
+      { path: 'lecturers', element: <Lecturers /> },
       { path: 'account', element: <Account /> },
       { path: 'account/:id', element: <Account /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'products', element: <ProductList /> },
-      { path: 'settings', element: <Settings /> },
+      { path: 'update-password', element: <Settings /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
@@ -32,10 +35,10 @@ const routes = (isLoggedIn) => [
         path: 'login',
         element: !isLoggedIn ? <Login /> : <Navigate to="/app/dashboard" />
       },
-      {
-        path: 'register',
-        element: !isLoggedIn ? <Register /> : <Navigate to="/app/dashboard" />
-      },
+      // {
+      //   path: 'register',
+      //   element: !isLoggedIn ? <Register /> : <Navigate to="/app/dashboard" />
+      // },
       { path: '404', element: <NotFound /> },
       { path: '/', element: <Navigate to="/app/dashboard" /> },
       { path: '*', element: <Navigate to="/404" /> }

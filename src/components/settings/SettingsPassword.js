@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import {
   Box,
@@ -6,13 +7,17 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  TextField
+  TextField,
+  Container,
+  Grid
 } from '@material-ui/core';
 
-const SettingsPassword = (props) => {
+const SettingsPassword = () => {
   const [values, setValues] = useState({
+    id: '',
     password: '',
-    confirm: ''
+    newPassword: '',
+    confirmPassword: ''
   });
 
   const handleChange = (event) => {
@@ -22,19 +27,71 @@ const SettingsPassword = (props) => {
     });
   };
 
+  // handle save password
+  const handleSave = (event) => {
+    console.log('saved');
+    console.log(values);
+  };
+
   return (
-    <form {...props}>
+    <form autoComplete="off" noValidate>
       <Card>
-        <CardHeader
-          subheader="Update password"
-          title="Password"
-        />
+        <CardHeader title="Update Password" />
         <Divider />
         <CardContent>
+          <Grid container spacing={2}>
+            <Grid item lg={6}>
+              <TextField
+                fullWidth
+                label="User ID"
+                name="id"
+                onChange={handleChange}
+                value={values.id}
+                variant="outlined"
+                required
+              />
+            </Grid>
+            <Grid item lg={6}>
+              <TextField
+                fullWidth
+                label="Password"
+                name="password"
+                onChange={handleChange}
+                type="password"
+                value={values.password}
+                variant="outlined"
+                required
+              />
+            </Grid>
+            <Grid item lg={6}>
+              <TextField
+                fullWidth
+                label="New Password"
+                name="newPassword"
+                onChange={handleChange}
+                type="password"
+                value={values.newPassword}
+                variant="outlined"
+                required
+              />
+            </Grid>
+            <Grid item lg={6}>
+              <TextField
+                fullWidth
+                label="Confirm password"
+                name="confirmPassword"
+                onChange={handleChange}
+                type="password"
+                value={values.confirmPassword}
+                variant="outlined"
+                required
+              />
+            </Grid>
+          </Grid>
+          {/* <CardContent>
           <TextField
             fullWidth
             label="Password"
-            margin="normal"
             name="password"
             onChange={handleChange}
             type="password"
@@ -51,6 +108,7 @@ const SettingsPassword = (props) => {
             value={values.confirm}
             variant="outlined"
           />
+        </CardContent> */}
         </CardContent>
         <Divider />
         <Box
@@ -60,10 +118,7 @@ const SettingsPassword = (props) => {
             p: 2
           }}
         >
-          <Button
-            color="primary"
-            variant="contained"
-          >
+          <Button color="primary" variant="contained" onClick={handleSave}>
             Update
           </Button>
         </Box>

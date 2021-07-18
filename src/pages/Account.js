@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet';
 import { Box, Container, Grid } from '@material-ui/core';
 import AccountProfile from '../components/account/AccountProfile';
 import AccountProfileDetails from '../components/account/AccountProfileDetails';
+import LecturerAccountCreating from '../components/account/LecturerAccountCreating';
 import AppContext from '../appContext';
 import { axiosInstance } from '../utils';
 
@@ -15,22 +16,15 @@ const Account = () => {
 
   useEffect(async () => {
     try {
-      id = id || store.adminInfo.Info.id;
+      id = id || localStorage.webncAdmin_userId;
       const res = await axiosInstance.get(`/users/${id}`);
-      console.log(res);
+      res.data.results.Info.role = res.data.results.Role;
 
       if (id) {
         dispatch({
-          type: 'initUserInfo',
+          type: 'initUser',
           payload: {
-            userInfo: res.data.results
-          }
-        });
-      } else {
-        dispatch({
-          type: 'initAdminInfo',
-          payload: {
-            adminInfo: res.data.results
+            user: res.data.results.Info
           }
         });
       }
@@ -48,7 +42,7 @@ const Account = () => {
         sx={{
           backgroundColor: 'background.default',
           minHeight: '100%',
-          py: 3
+          py: 2
         }}
       >
         <Container maxWidth="lg">
@@ -58,6 +52,9 @@ const Account = () => {
             </Grid>
             <Grid item lg={8} md={6} xs={12}>
               <AccountProfileDetails />
+            </Grid>
+            <Grid item lg={12} md={12} xs={12}>
+              <LecturerAccountCreating />
             </Grid>
           </Grid>
         </Container>

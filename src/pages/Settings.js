@@ -1,12 +1,11 @@
 import { Helmet } from 'react-helmet';
 import { Box, Container } from '@material-ui/core';
-import SettingsNotifications from '../components/settings/SettingsNotifications';
 import SettingsPassword from '../components/settings/SettingsPassword';
 
 const SettingsView = () => (
   <>
     <Helmet>
-      <title>Settings | Urskyll Admin</title>
+      <title>Update Password | Urskyll Admin</title>
     </Helmet>
     <Box
       sx={{
@@ -15,9 +14,8 @@ const SettingsView = () => (
         py: 3
       }}
     >
-      <Container maxWidth="lg">
-        <SettingsNotifications />
-        <Box sx={{ pt: 3 }}>
+      <Container maxWidth="lg" spacing={1}>
+        <Box sx={{ pt: 2 }}>
           <SettingsPassword />
         </Box>
       </Container>

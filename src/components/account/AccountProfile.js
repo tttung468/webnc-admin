@@ -20,57 +20,54 @@ import AppContext from '../../appContext';
 
 const AccountProfile = () => {
   const { store } = useContext(AppContext);
-  let user = store.adminInfo;
+  let user = store.admin;
 
   // check route has id
   if (useParams().id) {
-    user = store.userInfo;
+    user = store.user;
   }
 
-  if (user) {
-    return (
-      <Card sx={{ height: '100%' }}>
-        <CardContent>
-          <Box
+  return (
+    <Card sx={{ height: '100%' }}>
+      <CardContent>
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
+          <Avatar
+            src={user.avatarUrl}
             sx={{
-              alignItems: 'center',
-              display: 'flex',
-              flexDirection: 'column'
+              height: 160,
+              width: 160
             }}
-          >
-            <Avatar
-              src={user.Info.avatarUrl}
-              sx={{
-                height: 170,
-                width: 170
-              }}
-            />
-            <Chip
-              size="small"
-              style={{ color: '#fff', backgroundColor: '#1976d2' }}
-              label={user.Role}
-            />
-            <Typography color="textPrimary" gutterBottom variant="h3">
-              {user.Info.userName}
-            </Typography>
-            <Typography color="textSecondary" variant="body1">
-              {user.Info.email}
-            </Typography>
-            <Typography color="textSecondary" variant="body1">
-              {user.Info.id}
-            </Typography>
-          </Box>
-        </CardContent>
-        {/* <Divider />
+          />
+          <Chip
+            size="small"
+            style={{ color: '#fff', backgroundColor: '#1976d2' }}
+            label={user.role}
+          />
+          <Typography color="textPrimary" gutterBottom variant="h3">
+            {user.userName}
+          </Typography>
+          <Typography color="textSecondary" variant="body1">
+            {user.email}
+          </Typography>
+          <Typography color="textSecondary" variant="body1">
+            {user.id}
+          </Typography>
+        </Box>
+      </CardContent>
+      {/* <Divider />
         <CardActions>
           <Button color="primary" fullWidth variant="text">
             Upload picture
           </Button>
         </CardActions> */}
-      </Card>
-    );
-  }
-  return null;
+    </Card>
+  );
 };
 
 export default AccountProfile;

@@ -1,14 +1,9 @@
-import { useEffect, useContext } from 'react';
+/* eslint-disable object-curly-newline */
+/* eslint-disable no-unused-vars */
+import { useEffect, useContext, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {
-  Avatar,
-  Box,
-  Chip,
-  Divider,
-  Drawer,
-  List
-} from '@material-ui/core';
+import { Avatar, Box, Chip, Divider, Drawer, List } from '@material-ui/core';
 import {
   AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
@@ -34,6 +29,11 @@ const items = [
     title: 'Students'
   },
   {
+    href: '/app/lecturers',
+    icon: UsersIcon,
+    title: 'Lecturers'
+  },
+  {
     href: '/app/products',
     icon: ShoppingBagIcon,
     title: 'Products'
@@ -44,20 +44,20 @@ const items = [
     title: 'Account'
   },
   {
-    href: '/app/settings',
+    href: '/app/update-password',
     icon: SettingsIcon,
-    title: 'Settings'
+    title: 'Update Password'
   },
-  {
-    href: '/login',
-    icon: LockIcon,
-    title: 'Login'
-  },
-  {
-    href: '/register',
-    icon: UserPlusIcon,
-    title: 'Register'
-  },
+  // {
+  //   href: '/login',
+  //   icon: LockIcon,
+  //   title: 'Login'
+  // },
+  // {
+  //   href: '/register',
+  //   icon: UserPlusIcon,
+  //   title: 'Register'
+  // },
   {
     href: '/404',
     icon: AlertCircleIcon,
@@ -68,6 +68,11 @@ const items = [
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
   const location = useLocation();
   const { store } = useContext(AppContext);
+  const [avatarUrl, setAvatarUrl] = useState('');
+
+  useEffect(() => {
+    setAvatarUrl(store.admin.avatarUrl);
+  }, [store.admin.avatarUrl]);
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -93,7 +98,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
       >
         <Avatar
           component={RouterLink}
-          src={store.adminInfo.Info.avatarUrl}
+          src={avatarUrl}
           sx={{
             cursor: 'pointer',
             width: 64,

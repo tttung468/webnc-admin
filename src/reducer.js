@@ -11,7 +11,6 @@ export default function reducer(state, action) {
         studentsList: action.payload.studentsList
       };
     }
-    // end studentsList action
 
     // teachersList action
     case 'initTeachersList': {
@@ -20,25 +19,22 @@ export default function reducer(state, action) {
         teachersList: action.payload.teachersList
       };
     }
-    // end teachersList action
 
-    // adminInfo action
-    case 'initAdminInfo': {
+    // admin action
+    case 'initAdmin': {
       return {
         ...state,
-        adminInfo: action.payload.adminInfo
+        admin: action.payload.admin
       };
     }
-    // end adminInfo action
 
-    // userInfo action
-    case 'initUserInfo': {
+    // user action
+    case 'initUser': {
       return {
         ...state,
-        userInfo: action.payload.userInfo
+        user: action.payload.user
       };
     }
-    // end userInfo action
 
     default:
       return state;

@@ -8,35 +8,30 @@ import './mixins/chartjs';
 import theme from './theme';
 import AppContext from './appContext';
 import reducer from './reducer';
+import { axiosInstance } from './utils';
 
 const initUser = {
-  Info: {
-    id: '',
-    userName: '',
-    email: '',
-    phoneNumber: null,
-    avatarUrl: '',
-    accessFailedCount: 0,
+  id: '',
+  userName: '',
+  email: '',
+  phoneNumber: null,
+  avatarUrl: '',
 
-    watchLists: null,
-    courses: null,
-    studentCourses: null,
-    feedbacks: null,
+  watchLists: null,
+  courses: null,
+  studentCourses: null,
+  feedbacks: null,
 
-    isTwoStepConfirmation: false,
-    isLocked: false,
-    emailConfirmed: false,
-    phoneNumberConfirmed: false,
-    twoFactorEnabled: false
-  },
-  Role: ''
+  isTwoStepConfirmation: false,
+  isLocked: false,
+  role: ''
 };
 
 const initialState = {
   studentsList: [],
   teachersList: [],
-  adminInfo: initUser,
-  userInfo: initUser
+  admin: initUser,
+  user: initUser
 };
 
 const App = () => {
@@ -53,6 +48,27 @@ const App = () => {
 
   // context
   const [store, dispatch] = useReducer(reducer, initialState);
+
+  // get adminInfo
+  useEffect(async () => {
+    try {
+      const id = localStorage.webncAdmin_userId;
+
+      if (id) {
+        const res = await axiosInstance.get(`/users/${id}`);
+        res.data.results.Info.role = res.data.results.Role;
+
+        dispatch({
+          type: 'initAdmin',
+          payload: {
+            admin: res.data.results.Info
+          }
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>

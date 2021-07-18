@@ -35,7 +35,7 @@ const useStyles = makeStyles({
   }
 });
 
-const StudentListResults = ({ ...rest }) => {
+const LecturerListResults = ({ ...rest }) => {
   const columns = [
     {
       id: 'id',
@@ -60,18 +60,18 @@ const StudentListResults = ({ ...rest }) => {
   useEffect(async () => {
     // get users list
     try {
-      const res = await axiosInstance.get('/Users/GetStudentList');
+      const res = await axiosInstance.get('/Users/GetLecturerList');
 
       dispatch({
-        type: 'initStudentsList',
+        type: 'initLecturersList',
         payload: {
-          studentsList: res.data.results.students
+          lecturersList: res.data.results.lecturers
         }
       });
 
       // set rows state
       const infoRows = [];
-      res.data.results.students.forEach((item) => infoRows.push(item.Info));
+      res.data.results.lecturers.forEach((item) => infoRows.push(item.Info));
       setRows(infoRows);
     } catch (err) {
       console.log(err);
@@ -227,8 +227,8 @@ const StudentListResults = ({ ...rest }) => {
   );
 };
 
-// StudentListResults.propTypes = {
-//   students: PropTypes.array.isRequired
+// LecturerListResults.propTypes = {
+//   lecturers: PropTypes.array.isRequired
 // };
 
-export default StudentListResults;
+export default LecturerListResults;

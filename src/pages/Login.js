@@ -24,10 +24,12 @@ async function getAdminInfo(dispatch) {
     const res = await axiosInstance.get(
       `/users/${localStorage.webncAdmin_userId}`
     );
+    res.data.results.Info.role = res.data.results.Role;
+
     dispatch({
-      type: 'initAdminInfo',
+      type: 'initAdmin',
       payload: {
-        adminInfo: res.data.results
+        admin: res.data.results.Info
       }
     });
   } catch (err) {
