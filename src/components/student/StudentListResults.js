@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 import { useState, useContext, useEffect } from 'react';
@@ -96,8 +97,21 @@ const StudentListResults = ({ ...rest }) => {
     navigate(`/app/account/${values.id}`);
   };
 
-  const handleDelete = (values) => {
-    console.log('Delete: ', values);
+  const handleDelete = async (values) => {
+    try {
+      const res = await axiosInstance.delete(`/users/${values.id}`);
+      setRows(rows.filter((item) => item.id !== values.id));
+      alert(`Delete '${values.userName}' successfully`);
+    } catch (err) {
+      if (err.response) {
+        console.log(err.response.data);
+        // alert(err.response.data.errors.description);
+      } else if (err.request) {
+        console.log(err.request);
+      } else {
+        console.log('Error', err.message);
+      }
+    }
   };
 
   return (

@@ -53,9 +53,11 @@ const Account = () => {
             <Grid item lg={8} md={6} xs={12}>
               <AccountProfileDetails />
             </Grid>
-            <Grid item lg={12} md={12} xs={12}>
-              <LecturerAccountCreating />
-            </Grid>
+            {id ? null : (
+              <Grid item lg={12} md={12} xs={12}>
+                <LecturerAccountCreating />
+              </Grid>
+            )}
           </Grid>
         </Container>
       </Box>

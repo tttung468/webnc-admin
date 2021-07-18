@@ -36,7 +36,7 @@ const VeryfyTwoStepConfirmation = async (email, otpCode) => {
       jsonData,
       headers
     );
-    alert('Verify two-step confirmation successfuly');
+    alert('Verify two-step confirmation successfully');
   } catch (err) {
     if (err.response) {
       console.log(err.response.data);
@@ -46,6 +46,7 @@ const VeryfyTwoStepConfirmation = async (email, otpCode) => {
     } else {
       console.log('Error', err.message);
     }
+    return false;
   }
 
   return true;

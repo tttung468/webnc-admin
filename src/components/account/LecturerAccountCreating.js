@@ -16,18 +16,18 @@ import {
 } from '@material-ui/core';
 import { axiosInstance } from '../../utils';
 
-function validateEmail(email) {
+const validateEmail = (email) => {
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
-}
+};
 
-function isOnlyLetters(str) {
+const isOnlyLetters = (str) => {
   const letterNumber = /^[0-9a-zA-Z]+$/;
   return str.match(letterNumber) !== null;
-}
+};
 
-function checkInvalidAccountInfo(values) {
+const checkInvalidAccountInfo = (values) => {
   // console.log(validateEmail(values.email));
   if (validateEmail(values.email) === false) {
     return 'Error: Invalid Email.';
@@ -40,7 +40,35 @@ function checkInvalidAccountInfo(values) {
   }
 
   return '';
-}
+};
+
+const changeRoleToLecturer = async (userId) => {
+  try {
+    const data = {
+      userId,
+      roleName: 'Lecturer'
+    };
+    const jsonData = JSON.stringify(data);
+    const headers = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    const res = await axiosInstance.put('/Users/ChangeRole', jsonData, headers);
+  } catch (err) {
+    if (err.response) {
+      console.log(err.response.data);
+      alert(err.response.data.errors.description);
+    } else if (err.request) {
+      console.log(err.request);
+    } else {
+      console.log('Error', err.message);
+    }
+    return false;
+  }
+
+  return true;
+};
 
 const LecturerAccountCreating = () => {
   const [values, setValues] = useState({
@@ -87,8 +115,14 @@ const LecturerAccountCreating = () => {
 
     try {
       const res = await axiosInstance.post('/auth/register', jsonData, headers);
-      // change role
-      alert('Update successfully.');
+      const checkChangeRoleSuccessfully = await changeRoleToLecturer(
+        res.data.results.registeredUser.id
+      );
+      if (checkChangeRoleSuccessfully == true) {
+        alert('Create account successfully.');
+      } else {
+        alert('Error: cannot change role for account');
+      }
     } catch (err) {
       if (err.response) {
         console.log(err.response.data);
@@ -99,8 +133,6 @@ const LecturerAccountCreating = () => {
         console.log('Error', err.message);
       }
     }
-
-    const a = 1;
   };
 
   return (
