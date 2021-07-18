@@ -1,3 +1,5 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable no-alert */
 /* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import {
@@ -11,6 +13,24 @@ import {
   Container,
   Grid
 } from '@material-ui/core';
+import { axiosInstance } from '../../utils';
+
+const checkInvalidAccountInfo = (values) => {
+  if (values.id === '') {
+    return 'Error: Id cannot be empty';
+  }
+  if (values.password === '') {
+    return 'Error: Password cannot be empty';
+  }
+  if (
+    values.newPassword === '' ||
+    values.newPassword !== values.confirmPassword
+  ) {
+    return 'Error: Invalid password';
+  }
+
+  return '';
+};
 
 const SettingsPassword = () => {
   const [values, setValues] = useState({
@@ -28,9 +48,44 @@ const SettingsPassword = () => {
   };
 
   // handle save password
-  const handleSave = (event) => {
-    console.log('saved');
-    console.log(values);
+  const handleSave = async (event) => {
+    // check id and password are valid to change
+    const isValidInfo = checkInvalidAccountInfo(values);
+    if (isValidInfo !== '') {
+      alert(isValidInfo);
+      return;
+    }
+
+    // change password
+    try {
+      const data = {
+        userId: values.id,
+        oldPassword: values.password,
+        newPassword: values.newPassword,
+        confirmPassword: values.confirmPassword
+      };
+      const jsonData = JSON.stringify(data);
+      const headers = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+      const res = await axiosInstance.post(
+        '/Auth/ChangePassword',
+        jsonData,
+        headers
+      );
+      alert('Change password successfully.');
+    } catch (err) {
+      if (err.response) {
+        console.log(err.response.data);
+        // alert(err.response.data.errors.description);
+      } else if (err.request) {
+        console.log(err.request);
+      } else {
+        console.log('Error', err.message);
+      }
+    }
   };
 
   return (
@@ -46,6 +101,7 @@ const SettingsPassword = () => {
                 label="User ID"
                 name="id"
                 onChange={handleChange}
+                type="text"
                 value={values.id}
                 variant="outlined"
                 required
@@ -88,27 +144,6 @@ const SettingsPassword = () => {
               />
             </Grid>
           </Grid>
-          {/* <CardContent>
-          <TextField
-            fullWidth
-            label="Password"
-            name="password"
-            onChange={handleChange}
-            type="password"
-            value={values.password}
-            variant="outlined"
-          />
-          <TextField
-            fullWidth
-            label="Confirm password"
-            margin="normal"
-            name="confirm"
-            onChange={handleChange}
-            type="password"
-            value={values.confirm}
-            variant="outlined"
-          />
-        </CardContent> */}
         </CardContent>
         <Divider />
         <Box

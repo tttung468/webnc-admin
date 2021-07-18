@@ -28,7 +28,6 @@ const isOnlyLetters = (str) => {
 };
 
 const checkInvalidAccountInfo = (values) => {
-  // console.log(validateEmail(values.email));
   if (validateEmail(values.email) === false) {
     return 'Error: Invalid Email.';
   }
@@ -150,6 +149,7 @@ const LecturerAccountCreating = () => {
             color="primary"
             variant="contained"
             onClick={handleCreateAccount}
+            size="small"
           >
             Create Account
           </Button>

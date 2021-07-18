@@ -33,7 +33,14 @@ async function getAdminInfo(dispatch) {
       }
     });
   } catch (err) {
-    console.log(err);
+    if (err.response) {
+      console.log(err.response.data);
+      // alert(err.response.data.errors.description);
+    } else if (err.request) {
+      console.log(err.request);
+    } else {
+      console.log('Error', err.message);
+    }
   }
 }
 
@@ -67,7 +74,14 @@ const Login = () => {
         alert("You don't have permission to login.");
       }
     } catch (err) {
-      alert(err);
+      if (err.response) {
+        console.log(err.response.data);
+        alert(err.response.data.errors.description);
+      } else if (err.request) {
+        console.log(err.request);
+      } else {
+        console.log('Error', err.message);
+      }
     }
   };
 
