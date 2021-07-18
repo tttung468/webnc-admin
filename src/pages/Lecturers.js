@@ -21,7 +21,7 @@ const LecturerList = () => {
         }}
       >
         <Container maxWidth={false}>
-          <LecturerListToolbar />
+          {/* <LecturerListToolbar /> */}
           <Box sx={{ pt: 3 }}>
             <LecturerListResults />
           </Box>

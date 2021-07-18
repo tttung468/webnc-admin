@@ -19,7 +19,7 @@ import {
 import AppContext from '../../appContext';
 import { axiosInstance } from '../../utils';
 
-const VeryfyTwoStepConfirmation = async (email, otpCode) => {
+const VerifyTwoStepConfirmation = async (email, otpCode) => {
   try {
     const data = {
       email,
@@ -41,6 +41,44 @@ const VeryfyTwoStepConfirmation = async (email, otpCode) => {
     if (err.response) {
       console.log(err.response.data);
       alert(err.response.data.errors.description);
+    } else if (err.request) {
+      console.log(err.request);
+    } else {
+      console.log('Error', err.message);
+    }
+    return false;
+  }
+
+  return true;
+};
+
+const LockUser = async (id) => {
+  try {
+    const res = await axiosInstance.get(`/Users/LockUser?id=${id}`);
+    alert('Lock user successfully');
+  } catch (err) {
+    if (err.response) {
+      console.log(err.response.data);
+      // alert(err.response.data.errors.description);
+    } else if (err.request) {
+      console.log(err.request);
+    } else {
+      console.log('Error', err.message);
+    }
+    return false;
+  }
+
+  return true;
+};
+
+const UnLockUser = async (id) => {
+  try {
+    const res = await axiosInstance.get(`/Users/UnlockUser?id=${id}`);
+    alert('Unlock user successfully');
+  } catch (err) {
+    if (err.response) {
+      console.log(err.response.data);
+      // alert(err.response.data.errors.description);
     } else if (err.request) {
       console.log(err.request);
     } else {
@@ -81,7 +119,7 @@ const AccountProfileDetails = () => {
   });
   const handleChangeSwitch = (event) => {
     if (event.target.name === 'isTwoStepConfirmation') {
-      const checkVerifySuccessfully = VeryfyTwoStepConfirmation(
+      const checkVerifySuccessfully = VerifyTwoStepConfirmation(
         details.email,
         details.otpCode
       );
@@ -90,7 +128,19 @@ const AccountProfileDetails = () => {
         return;
       }
     } else if (event.target.name === 'isLocked') {
-      console.log(event.target.name);
+      if (switchStates.isLocked) {
+        // unlock user
+        const checkUnlockSuccessfully = UnLockUser(details.id);
+        if (checkUnlockSuccessfully === false) {
+          return;
+        }
+      } else {
+        // lock user
+        const checkLockSuccessfully = LockUser(details.id);
+        if (checkLockSuccessfully === false) {
+          return;
+        }
+      }
     }
 
     setSwitchStates({
