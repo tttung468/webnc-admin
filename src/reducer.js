@@ -20,6 +20,22 @@ export default function reducer(state, action) {
       };
     }
 
+    // categoriesList action
+    case 'initCategoryList': {
+      return {
+        ...state,
+        categoriesList: action.payload.categoriesList
+      };
+    }
+
+    // subcategoriesList action
+    case 'initSubcategoryList': {
+      return {
+        ...state,
+        subcategoriesList: action.payload.subcategoriesList
+      };
+    }
+
     // admin action
     case 'initAdmin': {
       return {

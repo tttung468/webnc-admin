@@ -4,7 +4,7 @@ import Students from './pages/Students';
 import Lecturers from './pages/Lecturers';
 import Register from './pages/Register';
 import Settings from './pages/Settings';
-import ProductList from './pages/ProductList';
+import Categories from './pages/Categories';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -22,7 +22,7 @@ const routes = (isLoggedIn) => [
       { path: 'account', element: <Account /> },
       { path: 'account/:id', element: <Account /> },
       { path: 'dashboard', element: <Dashboard /> },
-      { path: 'products', element: <ProductList /> },
+      { path: 'categories', element: <Categories /> },
       { path: 'update-password', element: <Settings /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]

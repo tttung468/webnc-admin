@@ -1,3 +1,4 @@
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-alert */
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */

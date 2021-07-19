@@ -30,6 +30,8 @@ const initUser = {
 const initialState = {
   studentsList: [],
   teachersList: [],
+  categoriesList: [],
+  subcategoriesList: [],
   admin: initUser,
   user: initUser
 };

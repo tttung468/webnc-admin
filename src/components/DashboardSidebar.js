@@ -34,9 +34,9 @@ const items = [
     title: 'Lecturers'
   },
   {
-    href: '/app/products',
+    href: '/app/categories',
     icon: ShoppingBagIcon,
-    title: 'Products'
+    title: 'Categories'
   },
   {
     href: '/app/account',
@@ -47,22 +47,12 @@ const items = [
     href: '/app/update-password',
     icon: SettingsIcon,
     title: 'Update Password'
-  },
-  // {
-  //   href: '/login',
-  //   icon: LockIcon,
-  //   title: 'Login'
-  // },
+  }
   // {
   //   href: '/register',
   //   icon: UserPlusIcon,
   //   title: 'Register'
   // },
-  // {
-  //   href: '/404',
-  //   icon: AlertCircleIcon,
-  //   title: 'Error'
-  // }
 ];
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
