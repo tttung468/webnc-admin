@@ -20,10 +20,10 @@ const Categories = () => (
       <Container maxWidth={false}>
         <Box sx={{ pt: 3 }}>
           <Grid container spacing={3}>
-            <Grid item lg={5} md={6} xs={12}>
+            <Grid item lg={4} md={6} xs={12}>
               <CategoriesListResults />
             </Grid>
-            <Grid item lg={7} md={6} xs={12}>
+            <Grid item lg={8} md={6} xs={12}>
               <SubcategoriesListResults />
             </Grid>
           </Grid>

@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-return-assign */
 /* eslint-disable implicit-arrow-linebreak */
@@ -39,64 +40,27 @@ const useStyles = makeStyles({
   }
 });
 
-const mockData = [
-  {
-    id: 17,
-    name: 'Angular',
-    categoryTypeId: 1,
-    categoryType: 'Lập trình Web',
-    countCourses: 4,
-    imageUrl: 'https://picsum.photos/200',
-    label: 'Angular'
-  },
-  {
-    id: 18,
-    name: 'ReactJS',
-    categoryTypeId: 1,
-    categoryType: 'Lập trình Web',
-    countCourses: 4,
-    imageUrl: 'https://picsum.photos/200',
-    label: 'ReactJS'
-  },
-  {
-    id: 19,
-    name: 'VueJS',
-    categoryTypeId: 1,
-    categoryType: 'Lập trình Web',
-    countCourses: 4,
-    imageUrl: 'https://picsum.photos/200',
-    label: 'VueJS'
-  },
-  {
-    id: 20,
-    name: 'ReactNative',
-    categoryTypeId: 2,
-    categoryType: 'Lập trình Web',
-    countCourses: 4,
-    imageUrl: 'https://picsum.photos/200',
-    label: 'ReactNative'
-  },
-  {
-    id: 21,
-    name: 'Flutter',
-    categoryTypeId: 2,
-    categoryType: 'Lập trình Web',
-    countCourses: 4,
-    imageUrl: 'https://picsum.photos/200',
-    label: 'Flutter'
-  },
-  {
-    id: 21,
-    name: 'Flutter',
-    categoryTypeId: 2,
-    categoryType: 'Lập trình Web',
-    countCourses: 4,
-    imageUrl: 'https://picsum.photos/200',
-    label: 'Flutter'
+const getSubcategories = async (categoryId) => {
+  try {
+    const res = await axiosInstance.get(
+      `/Categories/CategoryListByCategoryTypeId?categoryId=${categoryId}`
+    );
+    return res.data.results;
+  } catch (err) {
+    if (err.response) {
+      console.log(err.response.data);
+      // alert(err.response.data.errors.description);
+    } else if (err.request) {
+      console.log(err.request);
+    } else {
+      console.log('Error', err.message);
+    }
   }
-];
+};
 
 const CategoriesListResults = ({ ...rest }) => {
+  const navigate = useNavigate();
+  const classes = useStyles();
   const columns = [
     {
       id: 'id',
@@ -114,45 +78,16 @@ const CategoriesListResults = ({ ...rest }) => {
   ];
   const [rows, setRows] = useState([]);
   const { store, dispatch } = useContext(AppContext);
-
-  // init value for state in reducer
-  useEffect(async () => {
-    // set default values for subcategories
-    dispatch({
-      type: 'initSubcategoryList',
-      payload: {
-        subcategoriesList: []
-      }
-    });
-
-    // get categories
-    try {
-      const res = await axiosInstance.get('/CategoryTypes');
-      // count subcategories
-      res.data.results.forEach(
-        (item) => (item.countSubcategories = item.categories.length)
-      );
-
-      dispatch({
-        type: 'initCategoriesList',
-        payload: {
-          categoriesList: res.data.results
-        }
-      });
-
-      // set rows state
-      const newRows = [];
-      res.data.results.forEach((item) => newRows.push(item));
-      setRows(newRows);
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
-
-  const navigate = useNavigate();
-  const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  // get categories and set rows
+  useEffect(() => {
+    // set rows state
+    const newRows = [];
+    store.categoriesList.forEach((item) => newRows.push(item));
+    setRows(newRows);
+  }, [store.categoriesList]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -163,20 +98,14 @@ const CategoriesListResults = ({ ...rest }) => {
     setPage(0);
   };
 
-  const handleDetails = (values) => {
-    // Lập trình thiết bị di động
-    if (values.id === 2) {
-      mockData.forEach(
-        (item) => (item.categoryType = 'Lập trình thiết bị di động')
-      );
-    } else {
-      mockData.forEach((item) => (item.categoryType = 'Lập trình Web'));
-    }
+  const handleDetails = async (values) => {
+    // get subcategories by categoryId
+    const data = await getSubcategories(values.id);
 
     dispatch({
-      type: 'initSubcategoryList',
+      type: 'initSubcategoriesList',
       payload: {
-        subcategoriesList: mockData
+        subcategoriesList: data
       }
     });
   };

@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { useState, useEffect, useReducer } from 'react';
 import { useRoutes } from 'react-router-dom';
@@ -67,6 +69,35 @@ const App = () => {
           }
         });
       }
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
+  // get categories and init default value for subcategories
+  useEffect(async () => {
+    // set default values for subcategories
+    dispatch({
+      type: 'initSubcategoriesList',
+      payload: {
+        subcategoriesList: []
+      }
+    });
+
+    // get categories
+    try {
+      const res = await axiosInstance.get('/CategoryTypes');
+      // count subcategories
+      res.data.results.forEach(
+        (item) => (item.countSubcategories = item.categories.length)
+      );
+
+      dispatch({
+        type: 'initCategoriesList',
+        payload: {
+          categoriesList: res.data.results
+        }
+      });
     } catch (err) {
       console.log(err);
     }

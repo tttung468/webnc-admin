@@ -21,7 +21,7 @@ export default function reducer(state, action) {
     }
 
     // categoriesList action
-    case 'initCategoryList': {
+    case 'initCategoriesList': {
       return {
         ...state,
         categoriesList: action.payload.categoriesList
@@ -29,7 +29,7 @@ export default function reducer(state, action) {
     }
 
     // subcategoriesList action
-    case 'initSubcategoryList': {
+    case 'initSubcategoriesList': {
       return {
         ...state,
         subcategoriesList: action.payload.subcategoriesList

@@ -22,12 +22,12 @@ import {
   TableContainer,
   TableHead,
   TablePagination,
-  TableRow
+  TableRow,
+  TextField
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import { axiosInstance } from '../../utils';
 import AppContext from '../../appContext';
 
 const useStyles = makeStyles({
@@ -35,7 +35,7 @@ const useStyles = makeStyles({
     width: '100%'
   },
   container: {
-    minHeight: 380
+    // minHeight: 380
   }
 });
 
@@ -50,12 +50,12 @@ const SubcategoriesListResults = ({ ...rest }) => {
       label: 'Subcategory Name'
     },
     {
-      id: 'categoryType',
+      id: 'categoryTypeName',
       label: 'Category name',
       align: 'center'
     },
     {
-      id: 'countCourses',
+      id: 'courseNumber',
       label: 'Courses',
       align: 'center'
     }
@@ -67,6 +67,7 @@ const SubcategoriesListResults = ({ ...rest }) => {
   useEffect(async () => {
     // set rows state
     setRows(store.subcategoriesList);
+    console.log(store.subcategoriesList);
   }, [store.subcategoriesList]);
 
   const navigate = useNavigate();
@@ -83,8 +84,13 @@ const SubcategoriesListResults = ({ ...rest }) => {
     setPage(0);
   };
 
+  // edit, delete subcategory
   const handleEdit = (values) => {
-    console.log('Watch Subcategories');
+    console.log('Edit Subcategory');
+  };
+
+  const handleDelete = (values) => {
+    console.log('Delete Subcategory');
   };
 
   return (
@@ -103,7 +109,7 @@ const SubcategoriesListResults = ({ ...rest }) => {
                     {column.label}
                   </TableCell>
                 ))}
-                <TableCell>Action</TableCell>
+                <TableCell align="center">Actions</TableCell>
               </TableRow>
             </TableHead>
             {rows ? (
@@ -122,19 +128,41 @@ const SubcategoriesListResults = ({ ...rest }) => {
                           </TableCell>
                         );
                       })}
-                      <TableCell>
-                        <Button
-                          aria-label="edit"
-                          size="small"
-                          variant="contained"
-                          style={{
-                            color: '#fff',
-                            backgroundColor: '#1976d2'
-                          }}
-                          onClick={() => handleEdit(row)}
-                        >
-                          Edit
-                        </Button>
+                      <TableCell align="center">
+                        <Container>
+                          <Grid container spacing={0.1}>
+                            <Grid item xs={6}>
+                              <Button
+                                aria-label="edit"
+                                size="small"
+                                variant="contained"
+                                style={{
+                                  color: '#fff',
+                                  backgroundColor: '#1976d2'
+                                }}
+                                startIcon={<EditIcon />}
+                                onClick={() => handleEdit(row)}
+                              >
+                                Edit
+                              </Button>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <Button
+                                aria-label="delete"
+                                size="small"
+                                variant="contained"
+                                style={{
+                                  color: '#fff',
+                                  backgroundColor: '#dc004e'
+                                }}
+                                startIcon={<DeleteIcon />}
+                                onClick={() => handleDelete(row)}
+                              >
+                                Delete
+                              </Button>
+                            </Grid>
+                          </Grid>
+                        </Container>
                       </TableCell>
                     </TableRow>
                   ))}
