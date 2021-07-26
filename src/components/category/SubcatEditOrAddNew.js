@@ -18,14 +18,6 @@ import {
 } from '@material-ui/core';
 import { axiosInstance } from '../../utils';
 
-const checkInvalidAccountInfo = (values) => {
-  if (values.password == '' || values.password != values.confirmPassword) {
-    return 'Error: Invalid password';
-  }
-
-  return '';
-};
-
 const options = ['Lập trình Web', 'Lập trình thiết bị di động'];
 
 const SubcatEditOrAddNew = () => {
@@ -48,7 +40,11 @@ const SubcatEditOrAddNew = () => {
 
   // handle save password
   const handleEditOrAddNew = (event) => {
-    console.log('saved');
+    if (values.id == '') {
+      console.log('add new');
+    } else {
+      console.log('edit');
+    }
     console.log(values);
   };
 
@@ -102,7 +98,7 @@ const SubcatEditOrAddNew = () => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Controllable"
+                    label="Category"
                     variant="outlined"
                   />
                 )}

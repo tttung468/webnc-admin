@@ -45,6 +45,7 @@ const getSubcategories = async (categoryId) => {
     const res = await axiosInstance.get(
       `/Categories/CategoryListByCategoryTypeId?categoryId=${categoryId}`
     );
+    console.log(res.data.results);
     return res.data.results;
   } catch (err) {
     if (err.response) {
@@ -166,7 +167,7 @@ const CategoriesListResults = ({ ...rest }) => {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
