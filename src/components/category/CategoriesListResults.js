@@ -36,7 +36,7 @@ const useStyles = makeStyles({
     width: '100%'
   },
   container: {
-    // minHeight: 432
+    minHeight: 380
   }
 });
 
@@ -126,7 +126,7 @@ const CategoriesListResults = ({ ...rest }) => {
                     {column.label}
                   </TableCell>
                 ))}
-                <TableCell>Action</TableCell>
+                <TableCell align="center">Action</TableCell>
               </TableRow>
             </TableHead>
             {rows ? (
@@ -165,7 +165,7 @@ const CategoriesListResults = ({ ...rest }) => {
             ) : null}
           </Table>
         </TableContainer>
-        {/* <TablePagination
+        <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={rows.length}
@@ -173,7 +173,7 @@ const CategoriesListResults = ({ ...rest }) => {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-        /> */}
+        />
       </Paper>
     </Card>
   );

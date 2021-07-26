@@ -35,7 +35,7 @@ const useStyles = makeStyles({
     width: '100%'
   },
   container: {
-    // minHeight: 380
+    minHeight: 380
   }
 });
 
@@ -67,7 +67,6 @@ const SubcategoriesListResults = ({ ...rest }) => {
   useEffect(async () => {
     // set rows state
     setRows(store.subcategoriesList);
-    console.log(store.subcategoriesList);
   }, [store.subcategoriesList]);
 
   const navigate = useNavigate();
@@ -131,7 +130,7 @@ const SubcategoriesListResults = ({ ...rest }) => {
                       <TableCell align="center">
                         <Container>
                           <Grid container spacing={0.1}>
-                            <Grid item xs={6}>
+                            {/* <Grid item xs={6}>
                               <Button
                                 aria-label="edit"
                                 size="small"
@@ -145,8 +144,8 @@ const SubcategoriesListResults = ({ ...rest }) => {
                               >
                                 Edit
                               </Button>
-                            </Grid>
-                            <Grid item xs={6}>
+                            </Grid> */}
+                            <Grid item xs={12}>
                               <Button
                                 aria-label="delete"
                                 size="small"
