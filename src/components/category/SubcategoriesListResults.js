@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-return-assign */
@@ -40,7 +41,7 @@ const useStyles = makeStyles({
     width: '100%'
   },
   container: {
-    minHeight: 380
+    // minHeight: 380
   }
 });
 
@@ -55,8 +56,8 @@ const SubcategoriesListResults = ({ ...rest }) => {
       label: 'Subcategory Name'
     },
     {
-      id: 'categoryTypeName',
-      label: 'Category name',
+      id: 'label',
+      label: 'Label',
       align: 'center'
     },
     {
@@ -87,13 +88,34 @@ const SubcategoriesListResults = ({ ...rest }) => {
     setPage(0);
   };
 
-  // edit, delete subcategory
-  const handleEdit = (values) => {
-    console.log('Edit Subcategory');
-  };
+  // delete subcategory
+  const handleDelete = async (values) => {
+    if (values.courseNumber != 0) {
+      try {
+        await axiosInstance.delete(`/Categories/${values.id}`);
 
-  const handleDelete = (values) => {
-    console.log('Delete Subcategory');
+        alert('Delete successfully');
+        // update ui with new subcategories list
+        dispatch({
+          type: 'initSubcategoriesList',
+          payload: {
+            subcategoriesList: store.subcategoriesList.filter(
+              (item) => item.id !== values.id
+            )
+          }
+        });
+      } catch (err) {
+        if (err.response) {
+          console.log(err.response.data);
+          // alert(err.response.data.errors.description);
+        } else if (err.request) {
+          console.log(err.request);
+        } else {
+          console.log('Error', err.message);
+        }
+      }
+    }
+    alert('Cannot delete a subcategory that have courses');
   };
 
   return (

@@ -1,10 +1,12 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable consistent-return */
 /* eslint-disable eqeqeq */
 /* eslint-disable no-alert */
 /* eslint-disable operator-linebreak */
 /* eslint-disable no-unused-vars */
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -17,18 +19,21 @@ import {
   Autocomplete
 } from '@material-ui/core';
 import { axiosInstance } from '../../utils';
+import AppContext from '../../appContext';
 
 const options = ['Lập trình Web', 'Lập trình thiết bị di động'];
 
 const SubcatEditOrAddNew = () => {
-  const [value, setValue] = useState(options[0]);
+  const { store, dispatch } = useContext(AppContext);
+  const [AutocompleteValue, setAutocompleteValue] = useState(options[0]);
   const [inputValue, setInputValue] = useState('');
   const [values, setValues] = useState({
-    id: '',
-    name: '',
-    categoryTypeId: 1,
-    image: 'https://picsum.photos/200',
-    label: ''
+    Id: '',
+    Name: '',
+    CategoryTypeId: 1,
+    ImageUrl: '',
+    Image: null,
+    Label: ''
   });
 
   const handleChange = (event) => {
@@ -38,14 +43,43 @@ const SubcatEditOrAddNew = () => {
     });
   };
 
-  // handle save password
+  const handleChangeImage = (event) => {
+    setValues({ ...values, Image: event.target.files[0] });
+  };
+
+  const handleAddNew = async (event) => {
+    const bodyFormData = new FormData();
+    bodyFormData.append('Id', 0);
+    bodyFormData.append('Name', values.Name);
+    bodyFormData.append('CategoryTypeId', values.CategoryTypeId);
+    bodyFormData.append('ImageUrl', '');
+    bodyFormData.append('Image', values.Image);
+    bodyFormData.append('Label', values.Label);
+
+    try {
+      const res = await axiosInstance.post('/Categories', bodyFormData, {
+        'Content-Type': 'multipart/form-data'
+      });
+
+      alert('Add new successfully');
+    } catch (err) {
+      if (err.response) {
+        console.log(err.response.data);
+        alert('Failed to add new category');
+      } else if (err.request) {
+        console.log(err.request);
+      } else {
+        console.log('Error', err.message);
+      }
+    }
+  };
+
   const handleEditOrAddNew = (event) => {
-    if (values.id == '') {
-      console.log('add new');
+    if (values.Id == '') {
+      handleAddNew(event);
     } else {
       console.log('edit');
     }
-    console.log(values);
   };
 
   return (
@@ -58,36 +92,44 @@ const SubcatEditOrAddNew = () => {
             p: 2
           }}
         >
-          <CardHeader title="Edit an existed subcategory Or Create a new subcategory" />
+          <CardHeader title="Add a new subcategory" />
           <Button
             color="primary"
             variant="contained"
-            onClick={handleEditOrAddNew}
+            onClick={handleAddNew}
             size="small"
+            disabled={
+              values.Image == null ||
+              values.Name.length == 0 ||
+              values.Label.length == 0
+            }
           >
-            Edit Or Create
+            Add new
           </Button>
         </Box>
         <Divider />
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item lg={3}>
-              <TextField
-                fullWidth
-                label="ID (Leave empty if you want to create new)"
-                name="id"
-                onChange={handleChange}
-                value={values.id}
-                variant="outlined"
-                type="number"
-                required
+            <Grid item lg={2}>
+              {/* <Avatar src={values.image} sx={{ mr: 2 }}>
+                {values.image}
+              </Avatar> */}
+              <input
+                type="file"
+                id="imageInput"
+                onChange={handleChangeImage}
+                accept="image/*"
               />
             </Grid>
             <Grid item lg={3}>
               <Autocomplete
-                value={value}
+                value={AutocompleteValue}
                 onChange={(event, newValue) => {
-                  setValue(newValue);
+                  setValues({
+                    ...values,
+                    CategoryTypeId: newValue == options[0] ? 1 : 2
+                  });
+                  setAutocompleteValue(newValue);
                 }}
                 inputValue={inputValue}
                 onInputChange={(event, newInputValue) => {
@@ -96,24 +138,32 @@ const SubcatEditOrAddNew = () => {
                 id="controllable-states-demo"
                 options={options}
                 renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Category"
-                    variant="outlined"
-                  />
+                  <TextField {...params} label="Category" variant="outlined" />
                 )}
               />
             </Grid>
-            <Grid item lg={6}>
+            <Grid item lg={4}>
               <TextField
                 fullWidth
                 label="Subcategory Name"
-                name="name"
+                name="Name"
                 onChange={handleChange}
-                value={values.name}
+                value={values.Name}
                 variant="outlined"
-                type="number"
                 required
+                error={values.Name.length == 0}
+              />
+            </Grid>
+            <Grid item lg={3}>
+              <TextField
+                fullWidth
+                label="Label"
+                name="Label"
+                onChange={handleChange}
+                value={values.Label}
+                variant="outlined"
+                required
+                error={values.Label.length == 0}
               />
             </Grid>
           </Grid>

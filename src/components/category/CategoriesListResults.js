@@ -36,7 +36,7 @@ const useStyles = makeStyles({
     width: '100%'
   },
   container: {
-    minHeight: 380
+    // minHeight: 420
   }
 });
 
@@ -45,7 +45,7 @@ const getSubcategories = async (categoryId) => {
     const res = await axiosInstance.get(
       `/Categories/CategoryListByCategoryTypeId?categoryId=${categoryId}`
     );
-    console.log(res.data.results);
+
     return res.data.results;
   } catch (err) {
     if (err.response) {
