@@ -28,6 +28,14 @@ export default function reducer(state, action) {
       };
     }
 
+    // subcategory action
+    case 'initEditSubcategory': {
+      return {
+        ...state,
+        editSubcategory: action.payload.editSubcategory
+      };
+    }
+
     // subcategoriesList action
     case 'initSubcategoriesList': {
       return {

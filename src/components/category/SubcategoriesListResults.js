@@ -1,3 +1,4 @@
+/* eslint-disable react/button-has-type */
 /* eslint-disable eqeqeq */
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
@@ -90,7 +91,7 @@ const SubcategoriesListResults = ({ ...rest }) => {
 
   // delete subcategory
   const handleDelete = async (values) => {
-    if (values.courseNumber != 0) {
+    if (values.courseNumber === 0) {
       try {
         await axiosInstance.delete(`/Categories/${values.id}`);
 
@@ -114,8 +115,19 @@ const SubcategoriesListResults = ({ ...rest }) => {
           console.log('Error', err.message);
         }
       }
+    } else {
+      alert('Cannot delete a subcategory that have courses');
     }
-    alert('Cannot delete a subcategory that have courses');
+  };
+
+  // edit subcategory
+  const handleEdit = (value) => {
+    dispatch({
+      type: 'initEditSubcategory',
+      payload: {
+        editSubcategory: value
+      }
+    });
   };
 
   return (
@@ -143,16 +155,6 @@ const SubcategoriesListResults = ({ ...rest }) => {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                      {/* {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {column.format && typeof value === 'number'
-                              ? column.format(value)
-                              : value}
-                          </TableCell>
-                        );
-                      })} */}
                       <TableCell key={columns[0].id} align={columns[0].align}>
                         {row[columns[0].id]}
                       </TableCell>
@@ -180,7 +182,22 @@ const SubcategoriesListResults = ({ ...rest }) => {
                       <TableCell align="center">
                         <Container>
                           <Grid container spacing={0.1}>
-                            <Grid item xs={12}>
+                            <Grid item xs={6}>
+                              <Button
+                                aria-label="edit"
+                                size="small"
+                                variant="contained"
+                                style={{
+                                  color: '#fff',
+                                  backgroundColor: '#1976d2'
+                                }}
+                                startIcon={<EditIcon />}
+                                onClick={() => handleEdit(row)}
+                              >
+                                Edit
+                              </Button>
+                            </Grid>
+                            <Grid item xs={6}>
                               <Button
                                 aria-label="delete"
                                 size="small"
@@ -217,9 +234,5 @@ const SubcategoriesListResults = ({ ...rest }) => {
     </Card>
   );
 };
-
-// SubcategoriesListResults.propTypes = {
-//   students: PropTypes.array.isRequired
-// };
 
 export default SubcategoriesListResults;

@@ -102,7 +102,6 @@ const CategoriesListResults = ({ ...rest }) => {
   const handleDetails = async (values) => {
     // get subcategories by categoryId
     const data = await getSubcategories(values.id);
-
     dispatch({
       type: 'initSubcategoriesList',
       payload: {

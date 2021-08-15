@@ -4,7 +4,7 @@
 /* eslint-disable no-alert */
 /* eslint-disable operator-linebreak */
 /* eslint-disable no-unused-vars */
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import {
   Avatar,
   Box,
@@ -23,7 +23,7 @@ import AppContext from '../../appContext';
 
 const options = ['Lập trình Web', 'Lập trình thiết bị di động'];
 
-const SubcatEditOrAddNew = () => {
+const SubcategoryEdit = () => {
   const { store, dispatch } = useContext(AppContext);
   const [AutocompleteValue, setAutocompleteValue] = useState(options[0]);
   const [inputValue, setInputValue] = useState('');
@@ -36,6 +36,22 @@ const SubcatEditOrAddNew = () => {
     Label: ''
   });
 
+  // get subcategory to edit
+  useEffect(() => {
+    if (store.editSubcategory) {
+      const editValue = {};
+      editValue.Id = store.editSubcategory.id;
+      editValue.Name = store.editSubcategory.name;
+      editValue.CategoryTypeId = store.editSubcategory.categoryTypeId;
+      editValue.ImageUrl = store.editSubcategory.imageUrl;
+      editValue.Image = null;
+      editValue.Label = store.editSubcategory.label;
+      setValues(editValue);
+
+      console.log(store.editSubcategory);
+    }
+  }, [store.editSubcategory]);
+
   const handleChange = (event) => {
     setValues({
       ...values,
@@ -47,38 +63,34 @@ const SubcatEditOrAddNew = () => {
     setValues({ ...values, Image: event.target.files[0] });
   };
 
-  const handleAddNew = async (event) => {
+  const handleEdit = async (event) => {
     const bodyFormData = new FormData();
-    bodyFormData.append('Id', 0);
+    bodyFormData.append('Id', values.Id);
     bodyFormData.append('Name', values.Name);
     bodyFormData.append('CategoryTypeId', values.CategoryTypeId);
-    bodyFormData.append('ImageUrl', '');
-    bodyFormData.append('Image', values.Image);
     bodyFormData.append('Label', values.Label);
+    if (values.Image) {
+      bodyFormData.append('ImageUrl', '');
+      bodyFormData.append('Image', values.Image);
+    } else {
+      bodyFormData.append('ImageUrl', values.ImageUrl);
+      bodyFormData.append('Image', '');
+    }
 
     try {
-      const res = await axiosInstance.post('/Categories', bodyFormData, {
+      const res = await axiosInstance.put('/Categories', bodyFormData, {
         'Content-Type': 'multipart/form-data'
       });
-
-      alert('Add new successfully');
+      alert('Edit successfully');
     } catch (err) {
       if (err.response) {
         console.log(err.response.data);
-        alert('Failed to add new category');
+        alert('Failed to edit category');
       } else if (err.request) {
         console.log(err.request);
       } else {
         console.log('Error', err.message);
       }
-    }
-  };
-
-  const handleEditOrAddNew = (event) => {
-    if (values.Id == '') {
-      handleAddNew(event);
-    } else {
-      console.log('edit');
     }
   };
 
@@ -92,25 +104,21 @@ const SubcatEditOrAddNew = () => {
             p: 2
           }}
         >
-          <CardHeader title="Add a new subcategory" />
+          <CardHeader title="Edit subcategory" />
           <Button
             color="primary"
             variant="contained"
-            onClick={handleAddNew}
+            onClick={handleEdit}
             size="small"
-            disabled={
-              values.Image == null ||
-              values.Name.length == 0 ||
-              values.Label.length == 0
-            }
+            disabled={values.Name.length == 0 || values.Label.length == 0}
           >
-            Add new
+            Edit
           </Button>
         </Box>
         <Divider />
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item lg={2}>
+            <Grid item lg={4}>
               {/* <Avatar src={values.image} sx={{ mr: 2 }}>
                 {values.image}
               </Avatar> */}
@@ -121,7 +129,16 @@ const SubcatEditOrAddNew = () => {
                 accept="image/*"
               />
             </Grid>
-            <Grid item lg={3}>
+            <Grid item lg={4}>
+              <TextField
+                fullWidth
+                label="ID"
+                value={values.Id}
+                variant="outlined"
+                disabled
+              />
+            </Grid>
+            <Grid item lg={4}>
               <Autocomplete
                 value={AutocompleteValue}
                 onChange={(event, newValue) => {
@@ -142,7 +159,7 @@ const SubcatEditOrAddNew = () => {
                 )}
               />
             </Grid>
-            <Grid item lg={4}>
+            <Grid item lg={6}>
               <TextField
                 fullWidth
                 label="Subcategory Name"
@@ -154,7 +171,7 @@ const SubcatEditOrAddNew = () => {
                 error={values.Name.length == 0}
               />
             </Grid>
-            <Grid item lg={3}>
+            <Grid item lg={6}>
               <TextField
                 fullWidth
                 label="Label"
@@ -174,4 +191,4 @@ const SubcatEditOrAddNew = () => {
   );
 };
 
-export default SubcatEditOrAddNew;
+export default SubcategoryEdit;
