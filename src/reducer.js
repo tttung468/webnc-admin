@@ -4,7 +4,6 @@
 export default function reducer(state, action) {
   // action = { type, payload }
   switch (action.type) {
-    // studentsList action
     case 'initStudentsList': {
       return {
         ...state,
@@ -12,7 +11,6 @@ export default function reducer(state, action) {
       };
     }
 
-    // teachersList action
     case 'initTeachersList': {
       return {
         ...state,
@@ -20,7 +18,6 @@ export default function reducer(state, action) {
       };
     }
 
-    // categoriesList action
     case 'initCategoriesList': {
       return {
         ...state,
@@ -28,7 +25,6 @@ export default function reducer(state, action) {
       };
     }
 
-    // subcategory action
     case 'initEditSubcategory': {
       return {
         ...state,
@@ -36,11 +32,25 @@ export default function reducer(state, action) {
       };
     }
 
-    // subcategoriesList action
     case 'initSubcategoriesList': {
       return {
         ...state,
         subcategoriesList: action.payload.subcategoriesList
+      };
+    }
+
+    case 'initCoursesList': {
+      return {
+        ...state,
+        coursesList: action.payload.coursesList
+      };
+    }
+
+    // course action
+    case 'initCourse': {
+      return {
+        ...state,
+        course: action.payload.course
       };
     }
 

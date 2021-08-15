@@ -29,13 +29,36 @@ const initUser = {
   role: ''
 };
 
+const initCourse = {
+  id: 0,
+  price: 0,
+  name: '',
+  imageUrl: '',
+  lastUpdated: '',
+  status: '',
+  categoryId: 0,
+  categoryName: '',
+  categoryTypeId: 0,
+  categoryTypeName: '',
+  discount: 0,
+  shortDiscription: '',
+  detailDiscription: '',
+  lecturerId: '',
+  lecturer: {
+    userName: ''
+  },
+  rating: 0,
+  lectures: []
+};
+
 const initialState = {
   studentsList: [],
   teachersList: [],
   categoriesList: [],
   subcategoriesList: [],
   admin: initUser,
-  user: initUser
+  user: initUser,
+  course: initCourse
 };
 
 const App = () => {

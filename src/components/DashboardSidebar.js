@@ -39,6 +39,11 @@ const items = [
     title: 'Categories'
   },
   {
+    href: '/app/courses',
+    icon: ShoppingBagIcon,
+    title: 'Courses'
+  },
+  {
     href: '/app/account',
     icon: UserIcon,
     title: 'Account'

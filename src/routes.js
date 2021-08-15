@@ -9,6 +9,8 @@ import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Account from './pages/Account';
+import Courses from './pages/Courses';
+import Course from './pages/Course';
 import MainLayout from './components/MainLayout';
 import DashboardLayout from './components/DashboardLayout';
 
@@ -23,6 +25,8 @@ const routes = (isLoggedIn) => [
       { path: 'account/:id', element: <Account /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'categories', element: <Categories /> },
+      { path: 'courses', element: <Courses /> },
+      { path: 'course/:id', element: <Course /> },
       { path: 'update-password', element: <Settings /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
