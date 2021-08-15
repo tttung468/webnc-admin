@@ -70,6 +70,14 @@ export default function reducer(state, action) {
       };
     }
 
+    // user action
+    case 'initSearchCourseText': {
+      return {
+        ...state,
+        searchCourseText: action.payload.searchCourseText
+      };
+    }
+
     default:
       return state;
   }

@@ -1,3 +1,5 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable function-paren-newline */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-alert */
 /* eslint-disable indent */
@@ -34,6 +36,19 @@ const useStyles = makeStyles({
     maxHeight: 440
   }
 });
+
+function find(items, text) {
+  const splittedText = text.split(' ');
+  return items.filter((item) =>
+    splittedText.every(
+      (el) =>
+        item.name.indexOf(el) > -1 ||
+        item.lecturer.indexOf(el) > -1 ||
+        item.status.indexOf(el) > -1 ||
+        item.categoryName.indexOf(el) > -1
+    )
+  );
+}
 
 const CoursesListResults = ({ ...rest }) => {
   const columns = [
@@ -88,6 +103,16 @@ const CoursesListResults = ({ ...rest }) => {
       console.log(err);
     }
   }, []);
+
+  // listen store.searchCourseText to filter array
+  useEffect(() => {
+    if (store.searchCourseText !== '') {
+      console.log(store.searchCourseText);
+      setRows(find(store.coursesList, store.searchCourseText));
+    } else if (store.searchCourseText === '' && store.coursesList) {
+      setRows(store.coursesList);
+    }
+  }, [store.searchCourseText]);
 
   const navigate = useNavigate();
   const classes = useStyles();

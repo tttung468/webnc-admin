@@ -58,7 +58,8 @@ const initialState = {
   subcategoriesList: [],
   admin: initUser,
   user: initUser,
-  course: initCourse
+  course: initCourse,
+  searchCourseText: ''
 };
 
 const App = () => {
